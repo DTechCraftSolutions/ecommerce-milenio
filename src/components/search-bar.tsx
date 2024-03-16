@@ -24,8 +24,8 @@ export function SearchBar() {
         }
     })
     return (
-        <div className={`w-full py-2 mt-5  flex flex-col ${isFixed} duration-500 justify-center items-center`}>
-            <div className="w-[90%] flex items-center rounded bg-zinc-100">
+        <div className={`w-full py-2 mt-5  flex flex-col ${isFixed} lg:hidden duration-500 justify-center items-center`}>
+            <div className="w-[80%] flex items-center rounded bg-zinc-100">
                 <input
                     type="text"
                     className="w-full h-12  pl-4 rounded outline-none bg-transparent"

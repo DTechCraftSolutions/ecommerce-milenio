@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const montSerrat = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-  <body className={`${inter.className} w-screen max-w-full md:overflow-x-hidden`}>{children}</body>
+    <html lang="pt-BR">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Colégio 3º milênio</title>
+      </head>
+      <body className={`${montSerrat.className} w-screen max-w-full md:overflow-x-hidden`}>{children}</body>
     </html>
   );
 }

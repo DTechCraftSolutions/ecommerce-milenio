@@ -20,7 +20,7 @@ export function BannerCaroussel() {
             plugins={[plugin.current]}
             onMouseEnter={plugin.current.stop}
             onMouseLeave={plugin.current.reset}
-            className="w-[92%] md:w-[70%] mx-auto -z-50   max-w-full">
+            className="w-[92%] lg:mt-24 md:w-[70%] mx-auto -z-50   max-w-full">
             <CarouselContent className="w-full ">
                 <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-cover md:h-96 h-48">...</CarouselItem>
                 <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-cover md:h-96 h-48">...</CarouselItem>

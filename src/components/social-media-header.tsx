@@ -3,7 +3,7 @@ import { CompanyDetails } from "@/info/company-details";
 
 export function SocialMediaHeader() {
     return (
-        <div className="w-full mt-20 ">
+        <div className="w-full lg:hidden mt-20 ">
             <h2 className="text-3xl w-full text-center font-medium text-secondary">
                 {CompanyDetails.name}
             </h2>
