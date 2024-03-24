@@ -9,7 +9,7 @@ import { SocialMediaHeader } from "@/components/social-media-header";
 export default function Home() {
   return (
     <main className="w-screen md:overflow-hidden">
-      <Header />
+      <Header animation />
       <div className="pt-16 max-w-full w-full">
         <HeaderBannerMobile />
         <SocialMediaHeader />

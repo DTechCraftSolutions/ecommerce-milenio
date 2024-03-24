@@ -1,5 +1,8 @@
+"use client"
+
 import { BiArrowToRight } from "react-icons/bi"
 import { ProductCard } from "./product-card"
+import Link from "next/link";
 
 interface ICategoryArea {
     category: string
@@ -45,15 +48,15 @@ export function CategoryArea({ category, products }: ICategoryArea) {
         }
     ]
     return (
-        <div className="w-full h-[300px] md:h-[450px]">
+        <div className="w-full h-[390px] md:h-[450px]">
             <div className="flex w-full md:w-4/5 md:mx-auto  px-4 items-center justify-between">
                 <h3 className="text-2xl text-primary font-medium">
                     {category}
                 </h3>
-                <button className="flex items-center mt-5 gap-2 text-sm text-primary font-medium">
+                <Link href={`/categoria/${category}`} className="flex items-center mt-5 gap-2 text-sm text-primary font-medium">
                     Ver todos
                     <BiArrowToRight />
-                </button>
+                </Link>
             </div>
             <div className="w-full overflow-x-scroll md:flex md:justify-center md:overflow-x-hidden">
                 <div className="w-[200vw] mt-5 flex md:w-4/5 items-center gap-4 px-4">

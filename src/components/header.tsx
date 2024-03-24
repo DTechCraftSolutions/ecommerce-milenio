@@ -17,8 +17,11 @@ import {
 } from "@/components/ui/navigation-menu"
 import { CompanyDetails } from "@/info/company-details";
 
+interface IHeader {
+    animation: boolean
+}
 
-export function Header() {
+export function Header({ animation }: IHeader) {
     const [isVisible, setIsVisible] = useState("opacity-0");
     function handleScrollToggleVisiblity() {
         if (window.scrollY < 120) {
@@ -34,7 +37,7 @@ export function Header() {
         }
     })
     return (
-        <header className="bg-primary fixed z-50 justify-between px-4 pt-2 shadow-md lg:px-16 text-white w-full h-16 lg:h-32 ">
+        <header className="bg-primary fixed z-50 justify-between px-4 pt-2 lg:px-16 text-white w-full h-16 lg:h-32 ">
             <div className="w-full flex justify-between lg:py-4 items-center">
                 <Sheet >
                     <SheetTrigger className="lg:hidden">
@@ -46,7 +49,7 @@ export function Header() {
 
                 </Sheet>
                 <Image src={"/logo-horizontal.png"} className="hidden lg:flex" alt="Logo" width={200} height={200} />
-                <Image className={`${isVisible} lg:hidden`} src={"/logo-sem-fundo.png"} alt="Logo" width={50} height={50} />
+                <Image className={`${animation ? isVisible : ""} lg:hidden`} src={"/logo-sem-fundo.png"} alt="Logo" width={50} height={50} />
                 <div className="w-[40%] mr-40 hidden  text-black lg:flex items-center rounded bg-zinc-100">
                     <input
                         type="text"
