@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { IoBag } from "react-icons/io5";
 
 interface IProductCard {
@@ -9,6 +11,7 @@ interface IProductCard {
 }
 
 export function ProductCard({ name, price, image, priceWithDiscount, discount }: IProductCard) {
+    
     return (
         <div className="w-full md:w-56 pb-2">
             <div className="w-full flex items-end rounded h-[230px] md:h-[300px] bg-zinc-300">
@@ -24,10 +27,10 @@ export function ProductCard({ name, price, image, priceWithDiscount, discount }:
                     R$ {String(priceWithDiscount.toFixed(2)).replace(".", ",")}
                 </span>
             </p>
-            <button className="w-full rounded h-10 hover:opacity-90 hover:duration-500 bg-primary flex items-center justify-center gap-2 text-white font-medium">
+            <Link href={"/produto/123"} className="w-full rounded h-10 hover:opacity-90 hover:duration-500 bg-primary flex items-center justify-center gap-2 text-white font-medium">
                 <IoBag className="text-white text-xl" />
                 Adicionar
-            </button>
+            </Link>
         </div>
     );
 }
