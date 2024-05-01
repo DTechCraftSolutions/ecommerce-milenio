@@ -103,7 +103,7 @@ export default function Page({
         </div>
         <Sheet>
           <SheetTrigger>
-          <IoBag className="text-2xl " />
+            <IoBag className="text-2xl " />
           </SheetTrigger>
           <SheetContent>
             <SheetClose className="outline-none ring-transparent ring-0" />
@@ -237,14 +237,14 @@ export default function Page({
           <div>
             <h2 className="font-semibold text-primary">Quantidade</h2>
             <div className="flex mt-5 items-center gap-2">
-              <Button onClick={() => setAmount(amount > 1 ? amount - 1 : 1)}>
+              <Button className="text-2xl text-white w-10 h-10 flex justify-center items-center bg-primary rounded-lg" onClick={() => setAmount(amount > 1 ? amount - 1 : 1)}>
                 -
               </Button>
               <input value={amount} onChange={(e) => {
                 if (isNaN(Number(e.target.value))) return
                 setAmount(Number(e.target.value))
               }} className="w-10 border-[0.5px] text-center border-zinc-300 h-10" type="text" />
-              <Button onClick={() => setAmount(amount + 1)}>
+              <Button className="text-2xl text-white w-10 h-10 flex justify-center items-center bg-primary rounded-lg" onClick={() => setAmount(amount + 1)}>
                 +
               </Button>
             </div>
@@ -259,6 +259,10 @@ export default function Page({
             </p>
           </div>
         </div>
+        <Button className="bg-green-500 mt-5 hover:bg-green-600 gap-2">
+          <IoLogoWhatsapp className="text-2xl" />
+          Compartilhar produto
+        </Button>
         <h3 className="font-semibold text-primary mt-5">
           Descrição
         </h3>
@@ -281,7 +285,7 @@ export default function Page({
         </div>
       </div>
       <div className="fixed md:hidden h-20 pb-4 bg-white left-0 z-50 w-full justify-center flex items-center bottom-0">
-        <Button className="w-[90%] gap-2 h-12 mt-5">
+        <Button className="w-[90%] bg-primary gap-2 h-12 mt-5">
           <IoBag className="text-xl" />
           Adicionar ao carrinho
         </Button>
