@@ -13,8 +13,8 @@ interface IProductCard {
 export function ProductCard({ name, price, image, priceWithDiscount, discount }: IProductCard) {
     
     return (
-        <div className="w-full md:w-56 pb-2">
-            <div className="w-full flex items-end rounded h-[230px] md:h-[300px] bg-zinc-300">
+        <div className="w-full md:w-56 p-4 bg-white rounded-2xl">
+            <div className="w-full flex items-end rounded h-[230px] md:h-[250px] bg-zinc-300">
                 <p className="text-center w-full text-sm text-white">
                     {name}
                 </p>

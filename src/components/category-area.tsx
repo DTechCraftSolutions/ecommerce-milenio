@@ -48,8 +48,8 @@ export function CategoryArea({ category, products }: ICategoryArea) {
         }
     ]
     return (
-        <div className="w-full h-[390px] md:h-[450px]">
-            <div className="flex w-full md:w-4/5 md:mx-auto  px-4 items-center justify-between">
+        <div className="w-full h-[390px] md:h-[450px] rounded-2xl ">
+            <div className="flex w-full lg:w-4/5 lg:mx-auto  px-4 items-center justify-between">
                 <h3 className="text-2xl text-primary font-medium">
                     {category}
                 </h3>
@@ -58,8 +58,8 @@ export function CategoryArea({ category, products }: ICategoryArea) {
                     <BiArrowToRight />
                 </Link>
             </div>
-            <div className="w-full overflow-x-scroll md:flex md:justify-center md:overflow-x-hidden">
-                <div className="w-[200vw] mt-5 flex md:w-4/5 items-center gap-4 px-4">
+            <div className="w-full overflow-x-scroll lg:flex lg:justify-center lg:overflow-x-hidden">
+                <div className="w-[270vw] md:w-[160vw]  mt-5 flex lg:w-4/5 items-center gap-4 px-4">
                     {
                         productList.map((product, index) => {
                             return (

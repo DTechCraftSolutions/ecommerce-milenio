@@ -16,6 +16,7 @@ import {
     NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import { CompanyDetails } from "@/info/company-details";
+import { Cart } from "./cart";
 
 interface IHeader {
     animation: boolean
@@ -63,7 +64,7 @@ export function Header({ animation }: IHeader) {
                         <IoBag className="text-3xl" />
                     </SheetTrigger>
                     <SheetContent side={"right"}>
-
+                        <Cart />
                     </SheetContent>
 
                 </Sheet>

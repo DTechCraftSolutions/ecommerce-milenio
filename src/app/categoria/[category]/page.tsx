@@ -23,7 +23,7 @@ export default function Page() {
     const router = useRouter()
 
     return (
-        <div className="w-screen">
+        <div className="w-screen bg-gray-200">
             <Header animation={false} />
             <div className="w-full fixed top-16 py-4 lg:hidden h-32 bg-primary">
                 <div className="w-[80%] flex items-center mx-auto rounded bg-zinc-100">

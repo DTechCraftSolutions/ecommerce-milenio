@@ -10,12 +10,12 @@ export default function Home() {
   return (
     <main className="w-screen md:overflow-hidden">
       <Header animation />
-      <div className="pt-16 max-w-full w-full">
+      <div className="pt-16 max-w-full w-full bg-gray-200">
         <HeaderBannerMobile />
         <SocialMediaHeader />
         <SearchBar />
         <BannerCaroussel />;
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col pb-16 md:pb-96 lg:pb-0 gap-16 ">
           <CategoryArea category="Camisetas" />
           <CategoryArea category="Camisetas" />
           <CategoryArea category="Camisetas" />

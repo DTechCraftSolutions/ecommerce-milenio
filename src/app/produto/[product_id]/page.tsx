@@ -53,9 +53,8 @@ export default function Page({
   ]
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen lg:bg-gray-200">
       <div className="w-full md:px-10 h-16 md:h-28 px-4 flex bg-primary items-center text-white md:bg-primary justify-between  fixed">
-        <Link href={"/"}><IoArrowBack className="md:hidden text-2xl  " /></Link>
         <div className="w-16 h-16 rounded-full md:hidden flex justify-center items-center bg-primary">
           <Image className="w-10 h-10" src={"/logo-sem-fundo.png"} alt="Logo" width={100} height={100} />
         </div>
@@ -113,11 +112,6 @@ export default function Page({
       {/* imagem mobile */}
       <div className="h-16"></div>
       <div className="w-full h-[50vh] md:hidden  justify-end flex flex-col items-center bg-zinc-200">
-        <div className="mb-20 justify-between w-14 flex items-center">
-          <div onClick={() => setSelectedPhoto(0)} className={`w-4 h-4 rounded-full ${selectedPhoto === 0 ? "bg-primary" : "bg-white"}`}></div>
-          <div onClick={() => setSelectedPhoto(1)} className={`w-4 h-4 rounded-full ${selectedPhoto === 1 ? "bg-primary" : "bg-white"}`}></div>
-          <div onClick={() => setSelectedPhoto(2)} className={`w-4 h-4 rounded-full ${selectedPhoto === 2 ? "bg-primary" : "bg-white"}`}></div>
-        </div>
       </div>
       {/* Desktop */}
       <div className="hidden pt-32 md:block">
@@ -135,13 +129,10 @@ export default function Page({
             Farda curso militar
           </h2>
         </div>
-        <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden justify-between  ">
+        <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-2xl shadow-md justify-between  ">
           <div className="w-[35%] h-full rounded-lg flex justify-center items-end bg-zinc-200">
             <div className=" justify-between w-14 flex mb-5 items-center">
-              <div onClick={() => setSelectedPhoto(0)} className={`w-4 h-4 cursor-pointer rounded-full ${selectedPhoto === 0 ? "bg-primary" : "bg-white"}`}></div>
-              <div onClick={() => setSelectedPhoto(1)} className={`w-4 h-4 cursor-pointer rounded-full ${selectedPhoto === 1 ? "bg-primary" : "bg-white"}`}></div>
-              <div onClick={() => setSelectedPhoto(2)} className={`w-4 h-4 cursor-pointer rounded-full ${selectedPhoto === 2 ? "bg-primary" : "bg-white"}`}></div>
-
+              
             </div>
           </div>
           <div className="w-[60%]">
@@ -210,7 +201,7 @@ export default function Page({
             tortor. Vivamus eget ultrices elit. Nunc tincidunt, dui vel
           </p>
           <h3 className="font-semibold text-primary my-5">Veja também</h3>
-          <div className="grid grid-cols-4">
+          <div className="grid gap-5 grid-cols-4">
             {Array.from({ length: 8 }).map((_, index) => (
               <ProductCard name="Camisetas" price={100} image="" discount={10} priceWithDiscount={90} key={index} />
             ))}
@@ -274,7 +265,7 @@ export default function Page({
         </p>
         <h3 className="text-primary my-5 font-bold">Veja mais</h3>
         <div className="w-full overflow-x-scroll">
-          <div className="w-[350vw] gap-5 grid grid-cols-8">
+          <div className="w-[350vw] grid grid-cols-8">
             {Array.from({ length: 8 }).map((_, index) => (
               <ProductCard name="Camisetas" price={100} image="" discount={10} priceWithDiscount={90} key={index} />
             ))}
