@@ -52,7 +52,7 @@ export function Header({ animation }: IHeader) {
                     </SheetContent>
 
                 </Sheet>
-                <Link href={"/"}><Image src={"/logo-horizontal.png"}  className="hidden cursor poniter lg:flex" alt="Logo" width={200} height={200} /></Link>
+                <Link className="hidden lg:grid" href={"/"}><Image src={"/logo-horizontal.png"}  className="hidden cursor poniter lg:flex" alt="Logo" width={200} height={200} /></Link>
                 <Image className={`${animation ? isVisible : ""} lg:hidden`} src={"/logo-sem-fundo.png"} alt="Logo" width={50} height={50} />
                 <div className="w-[40%] mr-40 hidden  text-black lg:flex items-center rounded bg-zinc-100">
                     <input
@@ -99,17 +99,17 @@ export function Header({ animation }: IHeader) {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <IoLogoFacebook className="text-3xl" />
+                        <IoLogoFacebook className="text-xl" />
                     </a>
                     <a
                         href={CompanyDetails.instagram}
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <IoLogoInstagram className="text-3xl" />
+                        <IoLogoInstagram className="text-xl" />
                     </a>
                     <a href={CompanyDetails.whatsapp} target="_blank" rel="noreferrer">
-                        <IoLogoWhatsapp className="text-3xl" />
+                        <IoLogoWhatsapp className="text-xl" />
                     </a>
                 </div>
 

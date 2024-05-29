@@ -19,6 +19,8 @@ import { useState } from "react"
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { Cart } from "@/components/cart"
+import { BiLeftArrow } from "react-icons/bi"
+import { useRouter } from "next/navigation"
 
 
 export default function Page({
@@ -52,13 +54,17 @@ export default function Page({
       id: "Gola polo GG",
     }
   ]
+  const router = useRouter()
   return (
     <div className="w-full min-h-screen lg:bg-gray-200 pb-8">
       <div className="w-full md:px-10 h-16 md:h-28 px-4 flex bg-primary items-center text-white md:bg-primary justify-between  fixed">
+        <button onClick={() => router.back()} className="md:hidden">
+          <IoArrowBack className="text-2xl" />
+        </button>
         <div className="w-16 h-16 rounded-full md:hidden flex justify-center items-center bg-primary">
           <Link href={"/"}><Image className="w-10 h-10" src={"/logo-sem-fundo.png"} alt="Logo" width={100} height={100} /></Link>
         </div>
-        <Link href={"/"}><Image className="hidden md:block" src={"/logo-horizontal.png"} alt="Logo" width={200} height={200} /></Link>
+        <Link className="hidden md:block" href={"/"}><Image className="hidden md:block" src={"/logo-horizontal.png"} alt="Logo" width={200} height={200} /></Link>
         <div className="w-[30%] mr-32 hidden justify-between lg:flex">
           <NavigationMenu className="w-full">
             <NavigationMenuList className="flex items-center">
@@ -85,17 +91,17 @@ export default function Page({
               target="_blank"
               rel="noreferrer"
             >
-              <IoLogoFacebook className="text-3xl" />
+              <IoLogoFacebook className="text-xl" />
             </a>
             <a
               href={CompanyDetails.instagram}
               target="_blank"
               rel="noreferrer"
             >
-              <IoLogoInstagram className="text-3xl" />
+              <IoLogoInstagram className="text-xl" />
             </a>
             <a href={CompanyDetails.whatsapp} target="_blank" rel="noreferrer">
-              <IoLogoWhatsapp className="text-3xl" />
+              <IoLogoWhatsapp className="text-xl" />
             </a>
           </div>
 
@@ -133,7 +139,7 @@ export default function Page({
         <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-t-3xl shadow-md justify-between  ">
           <div className="w-[35%] h-full rounded-lg flex justify-center items-end bg-zinc-200">
             <div className=" justify-between w-14 flex mb-5 items-center">
-              
+
             </div>
           </div>
           <div className="w-[60%]">

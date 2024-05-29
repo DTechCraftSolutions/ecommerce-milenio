@@ -82,7 +82,7 @@ export default function Page() {
             </div>
             <div className="w-[95%] mx-auto flex md:justify-start justify-center mt-5">
                 <Select>
-                    <SelectTrigger className="w-72 h-12 flex items-center justify-between px-2 text-primary border-[0.5px] border-zinc-300 rounded">
+                    <SelectTrigger className="w-72 bg-white h-12 flex items-center justify-between px-2 text-primary border-[0.5px] border-zinc-300 rounded">
                         <SelectValue placeholder="Filtre..." />
                         <MdOutlineKeyboardArrowDown className="text-primary" />
                     </SelectTrigger>
