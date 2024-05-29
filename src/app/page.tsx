@@ -15,7 +15,7 @@ export default function Home() {
         <SocialMediaHeader />
         <SearchBar />
         <BannerCaroussel />;
-        <div className="flex flex-col pb-16 md:pb-96 lg:pb-0 gap-16 ">
+        <div className="flex bg-white py-4 rounded-t-3xl shadow flex-col pb-16 md:pb-96 lg:pb-0 gap-16 ">
           <CategoryArea category="Camisetas" />
           <CategoryArea category="Camisetas" />
           <CategoryArea category="Camisetas" />

@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/navigation-menu"
 import { CompanyDetails } from "@/info/company-details";
 import { Cart } from "./cart";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface IHeader {
     animation: boolean
@@ -37,6 +39,7 @@ export function Header({ animation }: IHeader) {
             window.removeEventListener("scroll", handleScrollToggleVisiblity)
         }
     })
+    const router = useRouter()
     return (
         <header className="bg-primary fixed z-50 justify-between px-4 pt-2 lg:px-16 text-white w-full h-16 lg:h-32 ">
             <div className="w-full flex justify-between lg:py-4 items-center">
@@ -49,7 +52,7 @@ export function Header({ animation }: IHeader) {
                     </SheetContent>
 
                 </Sheet>
-                <Image src={"/logo-horizontal.png"} className="hidden lg:flex" alt="Logo" width={200} height={200} />
+                <Link href={"/"}><Image src={"/logo-horizontal.png"}  className="hidden cursor poniter lg:flex" alt="Logo" width={200} height={200} /></Link>
                 <Image className={`${animation ? isVisible : ""} lg:hidden`} src={"/logo-sem-fundo.png"} alt="Logo" width={50} height={50} />
                 <div className="w-[40%] mr-40 hidden  text-black lg:flex items-center rounded bg-zinc-100">
                     <input
@@ -70,7 +73,7 @@ export function Header({ animation }: IHeader) {
                 </Sheet>
 
             </div>
-            <div className="w-[40%]  hidden justify-between lg:flex mx-auto">
+            <div className="w-[40%] hidden justify-between lg:flex mx-auto">
                 <NavigationMenu className="w-full">
                     <NavigationMenuList className="flex items-center">
                         <div className="flex items-center">

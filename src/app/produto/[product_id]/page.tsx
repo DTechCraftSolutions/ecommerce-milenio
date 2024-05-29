@@ -18,6 +18,7 @@ import {
 import { useState } from "react"
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
+import { Cart } from "@/components/cart"
 
 
 export default function Page({
@@ -51,14 +52,13 @@ export default function Page({
       id: "Gola polo GG",
     }
   ]
-
   return (
-    <div className="w-full min-h-screen lg:bg-gray-200">
+    <div className="w-full min-h-screen lg:bg-gray-200 pb-8">
       <div className="w-full md:px-10 h-16 md:h-28 px-4 flex bg-primary items-center text-white md:bg-primary justify-between  fixed">
         <div className="w-16 h-16 rounded-full md:hidden flex justify-center items-center bg-primary">
-          <Image className="w-10 h-10" src={"/logo-sem-fundo.png"} alt="Logo" width={100} height={100} />
+          <Link href={"/"}><Image className="w-10 h-10" src={"/logo-sem-fundo.png"} alt="Logo" width={100} height={100} /></Link>
         </div>
-        <Image className="hidden md:block" src={"/logo-horizontal.png"} alt="Logo" width={200} height={200} />
+        <Link href={"/"}><Image className="hidden md:block" src={"/logo-horizontal.png"} alt="Logo" width={200} height={200} /></Link>
         <div className="w-[30%] mr-32 hidden justify-between lg:flex">
           <NavigationMenu className="w-full">
             <NavigationMenuList className="flex items-center">
@@ -106,6 +106,7 @@ export default function Page({
           </SheetTrigger>
           <SheetContent>
             <SheetClose className="outline-none ring-transparent ring-0" />
+            <Cart />
           </SheetContent>
         </Sheet>
       </div>
@@ -114,7 +115,7 @@ export default function Page({
       <div className="w-full h-[50vh] md:hidden  justify-end flex flex-col items-center bg-zinc-200">
       </div>
       {/* Desktop */}
-      <div className="hidden pt-32 md:block">
+      <div className="hidden  pt-32 md:block">
         <div className="w-3/4 mx-auto flex justify-start border-b-[0.5px] border-zinc-200 pb-2 mb-5 gap-5 items-center">
           <Breadcrumb className="">
             <BreadcrumbList>
@@ -129,7 +130,7 @@ export default function Page({
             Farda curso militar
           </h2>
         </div>
-        <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-2xl shadow-md justify-between  ">
+        <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-t-3xl shadow-md justify-between  ">
           <div className="w-[35%] h-full rounded-lg flex justify-center items-end bg-zinc-200">
             <div className=" justify-between w-14 flex mb-5 items-center">
               
@@ -190,7 +191,7 @@ export default function Page({
 
           </div>
         </div>
-        <div className="w-[75%] mx-auto">
+        <div className="w-[80vw] mx-auto bg-white p-6 rounded-b-3xl">
           <h3 className="font-semibold text-primary my-5">Descrição</h3>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
