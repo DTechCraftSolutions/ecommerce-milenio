@@ -22,9 +22,10 @@ import Link from "next/link";
 
 interface IHeader {
     animation: boolean
+    categories: any[]
 }
 
-export function Header({ animation }: IHeader) {
+export function Header({ animation, categories }: IHeader) {
     const [isVisible, setIsVisible] = useState("opacity-0");
     function handleScrollToggleVisiblity() {
         if (window.scrollY < 120) {
@@ -80,10 +81,15 @@ export function Header({ animation }: IHeader) {
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger className="bg-transparent hover:bg-primary">Categorias</NavigationMenuTrigger>
                                 <NavigationMenuContent className="w-56 flex flex-col px-12 bg-primary py-4 text-white max-h-72">
-                                    <NavigationMenuLink>Fardas</NavigationMenuLink>
-                                    <NavigationMenuLink>Estojos</NavigationMenuLink>
-                                    <NavigationMenuLink>Garrafas</NavigationMenuLink>
-                                    <NavigationMenuLink>Bolsas</NavigationMenuLink>
+                                    {categories?.map((category) => (
+                                            <Link 
+                                            key={category.id}
+                                                href={`/categoria/${category.id}`}
+                                                className="hover:bg-zinc-400 h-10 flex items-center justify-center hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded "
+                                            >
+                                                {category.name}
+                                            </Link>
+                                    ))}
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
                             <button className="hover:bg-zinc-400 h-10 hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded ">
