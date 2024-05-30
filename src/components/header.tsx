@@ -22,7 +22,7 @@ import Link from "next/link";
 
 interface IHeader {
     animation: boolean
-    categories: any[]
+    categories?: any[]
 }
 
 export function Header({ animation, categories }: IHeader) {
