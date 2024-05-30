@@ -8,9 +8,10 @@ interface IProductCard {
     image?: string;
     priceWithDiscount: number;
     discount?: number;
+    id?: string;
 }
 
-export function ProductCard({ name, price, image, priceWithDiscount, discount }: IProductCard) {
+export function ProductCard({ name, price, image, priceWithDiscount, discount, id }: IProductCard) {
     
     return (
         <div className="w-48  md:w-56 p-4 bg-white rounded-2xl">
@@ -27,7 +28,7 @@ export function ProductCard({ name, price, image, priceWithDiscount, discount }:
                     R$ {String(priceWithDiscount.toFixed(2)).replace(".", ",")}
                 </span>
             </p>
-            <Link href={"/produto/123"} className="w-full rounded h-10 hover:opacity-90 hover:duration-500 bg-primary flex items-center justify-center gap-2 text-white font-medium">
+            <Link href={`/produto/${id}`} className="w-full rounded h-10 hover:opacity-90 hover:duration-500 bg-primary flex items-center justify-center gap-2 text-white font-medium">
                 <IoBag className="text-white text-xl" />
                 Adicionar
             </Link>

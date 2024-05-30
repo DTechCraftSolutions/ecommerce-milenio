@@ -6,7 +6,7 @@ interface IApi {
     body?: any;
     query?: any;}
 
-export async function useApi({method, path, body, query}: IApi) {
+export async function fetchApi({method, path, body, query}: IApi) {
     const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_API_URL,
         timeout: 7000,

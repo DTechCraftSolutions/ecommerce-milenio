@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/pagination";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { useEffect, useState } from "react";
-import { useApi } from "@/api";
+import { fetchApi } from "@/api";
 import Link from "next/link";
 const PRODUCTS_PER_PAGE = 8;
 
@@ -32,7 +32,7 @@ export default function Page() {
     const [sortOrder, setSortOrder] = useState<any>("");
 
     const getCategories = async () => {
-        const data = await useApi({
+        const data = await fetchApi({
             method: "get",
             path: "/categories/list",
         });
@@ -45,7 +45,7 @@ export default function Page() {
     };
 
     const getProductsByCategory = async () => {
-        const data = await useApi({
+        const data = await fetchApi({
             method: "post",
             path: `/products/listByCategory/${category}`,
         });
@@ -58,7 +58,7 @@ export default function Page() {
     };
 
     const getCategoryById = async () => {
-        const data = await useApi({
+        const data = await fetchApi({
             method: "get",
             path: `/categories/get-category/${category}`,
         });

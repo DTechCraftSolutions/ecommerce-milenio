@@ -4,7 +4,7 @@ import { BiArrowToRight } from "react-icons/bi"
 import { ProductCard } from "./product-card"
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useApi } from "@/api";
+import { fetchApi } from "@/api";
 
 interface ICategoryArea {
     category: any
@@ -52,26 +52,26 @@ export function CategoryArea({ category }: ICategoryArea) {
         }
     ]
     const getWithScroll = () => {
-        if(products.length === 3){
+        if (products.length === 3) {
             setWidth("w-[160vw] md:w-[100vw]")
         }
-        if(products.length === 4){
+        if (products.length === 4) {
             setWidth("w-[200vw] md:w-[120vw]")
         }
-        if(products.length === 5){
+        if (products.length === 5) {
             setWidth("w-[240vw] md:w-[140vw]")
         }
-        if(products.length >= 6){
+        if (products.length >= 6) {
             setWidth("w-[290vw] md:w-[160vw]")
         }
     }
 
     useEffect(() => {
         getWithScroll()
-    },[products])
+    }, [products])
     const getProducts = async () => {
         setIsLoading(true)
-        const data = await useApi({
+        const data = await fetchApi({
             method: "post",
             path: `/products/listByCategory/${category.id}`
         })
@@ -104,15 +104,17 @@ export function CategoryArea({ category }: ICategoryArea) {
                     {
                         productsSliced.map((product, index) => {
                             const price = product.price / 100
-                            const priceWithDiscount = price
+                            const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
+
                             return (
                                 <ProductCard
+                                    id={product.id}
                                     key={index}
                                     name={product.name}
                                     price={price}
                                     image={product.imageUrl}
                                     priceWithDiscount={priceWithDiscount}
-                                    discount={product.discount}
+                                    discount={product.valuePromotionInPercent}
                                 />
                             )
                         })

@@ -1,6 +1,6 @@
 "use client"
 
-import { useApi } from "@/api";
+import { fetchApi } from "@/api";
 import { BannerCaroussel } from "@/components/banners-caroussel";
 import { CategoryArea } from "@/components/category-area";
 import { Header } from "@/components/header";
@@ -14,7 +14,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const getCategories = async () => {
-    const data = await useApi({
+    const data = await fetchApi({
       method: "get",
       path: "/categories/list",
     })
