@@ -20,6 +20,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { useEffect, useState } from "react";
 import { fetchApi } from "@/api";
 import Link from "next/link";
+import { LoadingModal } from "@/components/loader";
 const PRODUCTS_PER_PAGE = 8;
 
 export default function Page() {
@@ -30,7 +31,7 @@ export default function Page() {
     const [categoryDetail, setCategoryDetail] = useState<any>();
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOrder, setSortOrder] = useState<any>("");
-
+    const [loading, setLoading] = useState(true);
     const getCategories = async () => {
         const data = await fetchApi({
             method: "get",
@@ -70,7 +71,7 @@ export default function Page() {
     };
 
     useEffect(() => {
-        Promise.all([getCategories(), getProductsByCategory(), getCategoryById()]);
+        Promise.all([getCategories(), getProductsByCategory(), getCategoryById()]).then(() => {setLoading(false)});
     }, []);
 
     const handleSortChange = (value: string) => {
@@ -158,6 +159,7 @@ export default function Page() {
                         : priceInRealBrl;
                     return (
                         <ProductCard
+                            id={product.id}
                             key={index}
                             name={name}
                             price={priceInRealBrl}
@@ -197,6 +199,7 @@ export default function Page() {
                     </PaginationContent>
                 </Pagination>
             </div>
+            <LoadingModal loading={loading} />
         </div>
     );
 }

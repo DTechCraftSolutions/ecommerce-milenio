@@ -14,43 +14,6 @@ export function CategoryArea({ category }: ICategoryArea) {
     const [isLoading, setIsLoading] = useState(false)
     const [products, setProducts] = useState<any[]>([])
     const [width, setWidth] = useState("")
-    const productList = [
-        {
-            name: "Camisetas",
-            price: 100,
-            image: "",
-            priceWithDiscount: 90,
-            discount: 10
-        },
-        {
-            name: "Camisetas",
-            price: 100,
-            image: "",
-            priceWithDiscount: 90,
-            discount: 10
-        },
-        {
-            name: "Camisetas",
-            price: 100,
-            image: "",
-            priceWithDiscount: 90,
-            discount: 10
-        },
-        {
-            name: "Camisetas",
-            price: 100,
-            image: "",
-            priceWithDiscount: 90,
-            discount: 10
-        },
-        {
-            name: "Camisetas",
-            price: 100,
-            image: "",
-            priceWithDiscount: 90,
-            discount: 10
-        }
-    ]
     const getWithScroll = () => {
         if (products.length === 3) {
             setWidth("w-[160vw] md:w-[100vw]")

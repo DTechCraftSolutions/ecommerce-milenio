@@ -15,12 +15,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { Cart } from "@/components/cart"
 import { BiLeftArrow } from "react-icons/bi"
 import { useRouter } from "next/navigation"
+import { fetchApi } from "@/api"
+import { LoadingModal } from "@/components/loader"
 
 
 export default function Page({
@@ -32,32 +34,74 @@ export default function Page({
 }) {
   const { product_id } = params
 
-  const [selectedPhoto, setSelectedPhoto] = useState(0)
-  const [selectedVariation, setSelectedVariation] = useState("Gola polo M")
+  const [productDetails, setProductDetails] = useState<any>({})
+  const [variants, setVariants] = useState<any>([])
+  const [selectedVariant, setSelectedVariant] = useState<any>()
+  const [relationedProducts, setRelationedProducts] = useState<any>([])
   const [amount, setAmount] = useState(1)
-
-  const variations = [
-    {
-      name: "Gola polo M",
-      id: "Gola polo M",
-    },
-    {
-      name: "Gola polo G",
-      id: "Gola polo G",
-    },
-    {
-      name: "Gola polo P",
-      id: "Gola polo P",
-    },
-    {
-      name: "Gola polo GG",
-      id: "Gola polo GG",
+  const [loading, setLoading] = useState(true)
+  const [categories, setCategories] = useState<any>([])
+  const getProductById = async () => {
+    const response = await fetchApi({
+      path: `/products/getById/${product_id}`,
+      method: "post"
+    })
+    if (response) {
+      return setProductDetails(response)
     }
-  ]
+    return console.log("error")
+  }
+  const getVeriantsByProduct = async () => {
+    const response = await fetchApi({
+      path: `/variants/product/${product_id}`,
+      method: "get"
+    })
+    if (response) {
+      setLoading(false)
+      return setVariants(response)
+    }
+    return console.log("error")
+  }
+
+  useEffect(() => {
+    Promise.all([getProductById(), getVeriantsByProduct(), getCategories()])
+      .then(() => setLoading(false))
+  }, [])
+
+  const shareProduct = () => {
+    const url = `${window.location.origin}/produto/${product_id}`
+    window.open((`https://wa.me/?text=${url}`), "_blank")
+  }
+  const getCategories = async () => {
+    const response = await fetchApi({
+      path: `/categories/list`,
+      method: "get"
+    })
+    if (response) {
+      return setCategories(response)
+    }
+    return console.log("error")
+  }
+  const getRelationedProducts = async () => {
+    const response = await fetchApi({
+      path: `/products/listByCategory/${productDetails?.categoryId}`,
+      method: "post"
+    })
+    if (response) {
+      return setRelationedProducts(response)
+    }
+    return console.log("error")
+  }
+  useEffect(() => {
+    if (productDetails) {
+      getRelationedProducts()
+    }
+  }, [productDetails])
+
   const router = useRouter()
   return (
     <div className="w-full min-h-screen lg:bg-gray-200 pb-8">
-      <div className="w-full md:px-10 h-16 md:h-28 px-4 flex bg-primary items-center text-white md:bg-primary justify-between  fixed">
+      <div className="w-full md:px-10 h-16 md:h-28 px-4 flex bg-primary z-30 items-center text-white md:bg-primary justify-between  fixed">
         <button onClick={() => router.back()} className="md:hidden">
           <IoArrowBack className="text-2xl" />
         </button>
@@ -72,10 +116,15 @@ export default function Page({
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent hover:bg-primary">Categorias</NavigationMenuTrigger>
                   <NavigationMenuContent className="w-56 flex flex-col px-12 bg-primary py-4 text-white max-h-72">
-                    <NavigationMenuLink>Fardas</NavigationMenuLink>
-                    <NavigationMenuLink>Estojos</NavigationMenuLink>
-                    <NavigationMenuLink>Garrafas</NavigationMenuLink>
-                    <NavigationMenuLink>Bolsas</NavigationMenuLink>
+                    {categories?.map((category: any) => (
+                      <Link
+                        key={category.id}
+                        href={`/categoria/${category.id}`}
+                        className="hover:bg-zinc-400 h-10 flex items-center justify-center hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded "
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <button className="hover:bg-zinc-400 h-10 hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded ">
@@ -118,7 +167,7 @@ export default function Page({
       </div>
       {/* imagem mobile */}
       <div className="h-16"></div>
-      <div className="w-full h-[50vh] md:hidden  justify-end flex flex-col items-center bg-zinc-200">
+      <div style={{ backgroundImage: `url(${productDetails?.imageUrl})` }} className="w-full h-[60vh] md:hidden  justify-end flex flex-col items-center bg-cover bg-no-repeat">
       </div>
       {/* Desktop */}
       <div className="hidden  pt-32 md:block">
@@ -133,11 +182,11 @@ export default function Page({
           </Breadcrumb>
 
           <h2 className=" text-start text-3xl font-bold text-primary ">
-            Farda curso militar
+            {productDetails.name}
           </h2>
         </div>
         <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-t-3xl shadow-md justify-between  ">
-          <div className="w-[35%] h-full rounded-lg flex justify-center items-end bg-zinc-200">
+          <div style={{ backgroundImage: `url(${productDetails.imageUrl})` }} className="w-[35%] h-full rounded-lg flex justify-center items-end bg-cover bg-no-repeat">
             <div className=" justify-between w-14 flex mb-5 items-center">
 
             </div>
@@ -147,11 +196,22 @@ export default function Page({
               Variação
             </h3>
             <div className=" flex gap-2 flex-wrap  mt-5">
-              {variations.map((variation, index) => (
-                <div onClick={() => setSelectedVariation(variation.id)} key={index} className={`h-10 cursor-pointer flex justify-center rounded  items-center  font-medium px-4 py-2 ${variation.id === selectedVariation ? "bg-primary text-white" : "bg-zinc-200"}`}>
-                  {variation.name}
+              {variants.length === 0 ?
+                <div>
+                  <p className="text-red-500 font-medium text-xl">Esgotado!</p>
                 </div>
-              ))}
+
+                :
+                variants?.map((variant: any, index: number) => (
+                  <div onClick={() => setSelectedVariant(() => {
+                    if (variant.amount > 0) setSelectedVariant(variant.id)
+                    if (selectedVariant === variant.id) setSelectedVariant("")
+                  })} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
+                    {variant.name}
+                    {variant.amount === 0 && <p className="text-red-500 ml-2">Esgotado!</p>}
+                  </div>
+                ))
+              }
             </div>
 
             <div className="w-full mt-5">
@@ -163,7 +223,7 @@ export default function Page({
                   <textarea className="w-[100%] h-24  rounded-lg border-[0.5px] border-zinc-300 px-4 py-2">
                   </textarea>
                 </div>
-                <Button className="bg-green-500 mt-5 hover:bg-green-600 gap-2">
+                <Button onClick={shareProduct} className="bg-green-500 mt-5 hover:bg-green-600 gap-2">
                   <IoLogoWhatsapp className="text-2xl" />
                   Compartilhar produto
                 </Button>
@@ -183,11 +243,16 @@ export default function Page({
               </div>
               <div>
 
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-primary ">Total R$</h3>
-                  <h3 className="font-semibold text-2xl text-primary"> 100,00</h3>
-                </div>
-                <Button className="gap-4 shadow bg-primary mt-5 h-10 px-10">
+                {
+                  loading ? "" :
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-primary ">Total R$</h3>
+                      <h3 className="font-semibold text-2xl text-primary">
+                        {String((productDetails?.price / 100 * amount).toFixed(2)).replace(".", ",")}
+                      </h3>
+                    </div>
+                }
+                <Button disabled={!selectedVariant} className="gap-4 shadow bg-primary mt-5 h-10 px-10">
                   <IoBag className="text-white shadow text-xl" />
                   Adicionar
                 </Button>
@@ -200,33 +265,36 @@ export default function Page({
         <div className="w-[80vw] mx-auto bg-white p-6 rounded-b-3xl">
           <h3 className="font-semibold text-primary my-5">Descrição</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            tincidunt, dui vel sagittis pellentesque, eros nisl aliquet
-            magna, sit amet pellentesque felis purus et tortor. Vivamus
-            eget ultrices elit. Nunc tincidunt, dui vel sagittis pellentesque,
-            eros nisl aliquet magna, sit amet pellentesque felis purus et
-            tortor. Vivamus eget ultrices elit. Nunc tincidunt, dui vel
+            {productDetails?.description}
           </p>
           <h3 className="font-semibold text-primary my-5">Veja também</h3>
           <div className="grid gap-5 grid-cols-4">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <ProductCard name="Camisetas" price={100} image="" discount={10} priceWithDiscount={90} key={index} />
-            ))}
+            {relationedProducts?.map((product: any, index: number) => {
+              const price = product.price / 100
+              const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
+              return (
+                <ProductCard name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} key={index} />
+              )
+            })}
           </div>
         </div>
       </div>
       {/* Mobile */}
       <div className="w-full h-40 md:hidden pt-8 bg-white md:rounded-none px-4 rounded-t-3xl md:mt-0 -mt-16">
         <h2 className="w-full text-center text-2xl font-bold text-primary ">
-          Farda curso militar
+          {productDetails?.name}
         </h2>
         <h3 className="font-semibold md:hidden text-primary mt-5">
           Variação
         </h3>
         <div className="w-full flex gap-2 flex-wrap  mt-5">
-          {variations.map((variation, index) => (
-            <div key={index} onClick={() => setSelectedVariation(variation.id)} className={` h-14 flex justify-center rounded  items-center text-lg font-medium px-4 ${selectedVariation === variation.id ? "bg-primary text-white" : "bg-zinc-200 text-primary"}`}>
-              {variation.name}
+          {variants.map((variant: any, index: number) => (
+            <div key={index} onClick={() => {
+              if (selectedVariant === variant.id) return setSelectedVariant("")
+              if (variant.amount > 0) setSelectedVariant(variant.id)
+            }} className={` h-14 flex justify-center rounded ${variant.amount === 0 ? "text-red bg-opacity-60" : "cursor-pointer"} items-center text-lg font-medium px-4 ${selectedVariant === variant.id ? "bg-primary text-white" : "bg-zinc-200 text-primary"}`}>
+              {variant.name}
+              {variant.amount === 0 && <span className="ml-2">Indisponível</span>}
             </div>
           ))}
 
@@ -247,17 +315,19 @@ export default function Page({
               </Button>
             </div>
           </div>
-          <div className="flex items-center
+          <div className="flex items-end
            text-primary font-bold my-5 gap-2">
             <h3 className="text-xl font-medium">
               Total R$
             </h3>
             <p className="text-3xl">
-              100,00
+              {loading ? "" : String((productDetails?.price / 100 * amount).toFixed(2)).replace(".", ",")}
             </p>
           </div>
         </div>
-        <Button className="bg-green-500 mt-5 hover:bg-green-600 gap-2">
+        <Button onClick={() => {
+          shareProduct()
+        }} className="bg-green-500 mt-5 hover:bg-green-600 gap-2">
           <IoLogoWhatsapp className="text-2xl" />
           Compartilhar produto
         </Button>
@@ -265,29 +335,33 @@ export default function Page({
           Descrição
         </h3>
         <p className="mt-5">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro nulla pariatur quidem harum neque dignissimos minima, temporibus dolorem adipisci libero. Corporis, at doloribus? Odit tempore quibusdam quas, adipisci ipsum tempora.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus ut a veritatis. Voluptatem dolor, aliquid a perspiciatis repellendus blanditiis accusamus tenetur, nulla atque quod, maiores vitae provident minima quos explicabo?
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque quo itaque maxime a fugit nam aperiam nobis accusantium pariatur alias, aliquid laboriosam tenetur, ducimus amet omnis, in eius magnam. Voluptates.
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis, autem in corrupti necessitatibus impedit error architecto tempora illo, dolor, rerum ex ipsa aut! Accusantium eligendi provident, numquam voluptatem laborum itaque?
+          {
+            productDetails?.description
+          }
         </p>
         <h3 className="text-primary my-5 font-bold">Veja mais</h3>
         <div className="w-full overflow-x-scroll">
           <div className="w-[350vw] grid grid-cols-8">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <ProductCard name="Camisetas" price={100} image="" discount={10} priceWithDiscount={90} key={index} />
-            ))}
+            {relationedProducts?.map((product: any, index: number) => {
+              const price = product.price / 100
+              const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
+              return (
+                <ProductCard name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} key={index} />
+              )
+            })}
           </div>
         </div>
         <div className="h-32">
 
         </div>
       </div>
-      <div className="fixed md:hidden h-20 pb-4 bg-white left-0 z-50 w-full justify-center flex items-center bottom-0">
-        <Button className="w-[90%] bg-primary gap-2 h-12 mt-5">
+      <div className={`fixed ${loading ? "hidden" : ""} md:hidden h-20 pb-4 bg-white left-0 z-50 w-full justify-center flex items-center bottom-0`}>
+        <Button disabled={!selectedVariant} className="w-[90%] bg-primary gap-2 h-12 mt-5">
           <IoBag className="text-xl" />
           Adicionar ao carrinho
         </Button>
       </div>
+      <LoadingModal loading={loading} />
     </div>
   )
 }

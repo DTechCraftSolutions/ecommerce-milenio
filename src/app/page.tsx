@@ -5,13 +5,14 @@ import { BannerCaroussel } from "@/components/banners-caroussel";
 import { CategoryArea } from "@/components/category-area";
 import { Header } from "@/components/header";
 import { HeaderBannerMobile } from "@/components/header-banner-mobile";
+import { LoadingModal } from "@/components/loader";
 import { SearchBar } from "@/components/search-bar";
 import { SocialMediaHeader } from "@/components/social-media-header";
 import { useEffect, useState } from "react";
 
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const getCategories = async () => {
     const data = await fetchApi({
@@ -26,7 +27,7 @@ export default function Home() {
     return console.log("error")
   }
   useEffect(() => {
-    Promise.all([getCategories()])
+    Promise.all([getCategories()]).then(() => setIsLoading(false))
   },[])
   return (
     <main className="w-screen md:overflow-hidden">
@@ -43,6 +44,7 @@ export default function Home() {
         </div>
 
       </div>
+      <LoadingModal loading={isLoading} />
     </main>
   );
 }
