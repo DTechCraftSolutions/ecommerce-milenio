@@ -22,3 +22,29 @@
     animation: spin 1s linear infinite;
   }
   
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+
+
+  
+  ::-webkit-scrollbar-track {
+    background-color: #9a9a9a;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #222961;
+    border-radius: 6px;
+    transition: all 0.5s ease-in-out;
+    
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #131739;
+  
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }

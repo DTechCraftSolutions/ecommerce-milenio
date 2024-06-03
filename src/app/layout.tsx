@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
+import { CartContext, CartProvider } from "@/contexts";
+import { Toaster } from "@/components/ui/sonner";
 
 const montSerrat = Poppins({
   subsets: ["latin"],
@@ -19,11 +21,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Colégio 3º milênio</title>
-      </head>
-      <body className={`${montSerrat.className} w-screen max-w-full md:overflow-x-hidden`}>{children}</body>
+      <CartProvider>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Colégio 3º milênio</title>
+        </head>
+        <body className={`${montSerrat.className} w-screen max-w-full md:overflow-x-hidden`}>{children}</body>
+        <Toaster />
+      </CartProvider>
     </html>
   );
 }

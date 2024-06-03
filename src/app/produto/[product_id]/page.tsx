@@ -15,15 +15,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { Cart } from "@/components/cart"
-import { BiLeftArrow } from "react-icons/bi"
 import { useRouter } from "next/navigation"
 import { fetchApi } from "@/api"
 import { LoadingModal } from "@/components/loader"
-
+import Cookie from "js-cookie"
+import { CartContext } from "@/contexts"
+import { toast } from "sonner"
 
 export default function Page({
   params,
@@ -41,6 +42,9 @@ export default function Page({
   const [amount, setAmount] = useState(1)
   const [loading, setLoading] = useState(true)
   const [categories, setCategories] = useState<any>([])
+  const [observation, setObservation] = useState("")
+  const [openCart, setOpenCart] = useState(false)
+  const { cart, setCart} = useContext(CartContext)
   const getProductById = async () => {
     const response = await fetchApi({
       path: `/products/getById/${product_id}`,
@@ -65,7 +69,7 @@ export default function Page({
 
   useEffect(() => {
     Promise.all([getProductById(), getVeriantsByProduct(), getCategories()])
-      .then(() => setLoading(false))
+      .then(() => setTimeout(() => setLoading(false), 2000))
   }, [])
 
   const shareProduct = () => {
@@ -92,6 +96,43 @@ export default function Page({
     }
     return console.log("error")
   }
+
+  const handleAddToCart = async () => {
+    const alreadyExistThisProductInCart = cart.find((cartItem) => {
+      if (cartItem.product_id === productDetails.id) {
+        return cartItem
+      }
+    })
+
+    if (alreadyExistThisProductInCart) return toast("Produto já existe na sacola", {
+      action: {
+        label: "Ir a sacola",
+        onClick: () => setOpenCart(true)
+      }
+    })
+    const variant = variants.find((variant: any) => variant.id === selectedVariant)
+    const priceWithDiscount = productDetails.valuePromotionInPercent ? (productDetails.price / 100) - (productDetails.price / 100) * (productDetails.valuePromotionInPercent / 100) : (productDetails.price / 100)
+    const newCartItem = {
+      name: productDetails?.name,
+      price: priceWithDiscount,
+      variantName: variant.name,
+      product_id: productDetails?.id,
+      variant_id: selectedVariant,
+      quantity: amount,
+      observation: observation !== observation ? observation : undefined
+    }
+
+    setCart([...cart, newCartItem])
+    Cookie.set("cart", JSON.stringify([...cart, newCartItem]))
+    toast("Produto adicionado!", {
+      description: `${productDetails.name}, ${amount} ${amount === 1 ? "unidade" : "unidades"}`,
+      action: {
+        label: "Ir a sacola",
+        onClick: () => setOpenCart(true),
+      },
+    })
+  }
+
   useEffect(() => {
     if (productDetails) {
       getRelationedProducts()
@@ -100,7 +141,7 @@ export default function Page({
 
   const router = useRouter()
   return (
-    <div className="w-full min-h-screen lg:bg-gray-200 pb-8">
+    loading ? <div><LoadingModal loading={loading} /></div> : <div className="w-full min-h-screen lg:bg-gray-200 pb-8">
       <div className="w-full md:px-10 h-16 md:h-28 px-4 flex bg-primary z-30 items-center text-white md:bg-primary justify-between  fixed">
         <button onClick={() => router.back()} className="md:hidden">
           <IoArrowBack className="text-2xl" />
@@ -155,7 +196,7 @@ export default function Page({
           </div>
 
         </div>
-        <Sheet>
+        <Sheet open={openCart} onOpenChange={setOpenCart}>
           <SheetTrigger>
             <IoBag className="text-2xl " />
           </SheetTrigger>
@@ -252,7 +293,7 @@ export default function Page({
                       </h3>
                     </div>
                 }
-                <Button disabled={!selectedVariant} className="gap-4 shadow bg-primary mt-5 h-10 px-10">
+                <Button onClick={handleAddToCart} disabled={!selectedVariant} className="gap-4 shadow bg-primary mt-5 h-10 px-10">
                   <IoBag className="text-white shadow text-xl" />
                   Adicionar
                 </Button>
@@ -316,7 +357,7 @@ export default function Page({
             </div>
           </div>
           <div className="flex items-end
-           text-primary font-bold my-5 gap-2">
+         text-primary font-bold my-5 gap-2">
             <h3 className="text-xl font-medium">
               Total R$
             </h3>
@@ -361,7 +402,6 @@ export default function Page({
           Adicionar ao carrinho
         </Button>
       </div>
-      <LoadingModal loading={loading} />
     </div>
   )
 }
