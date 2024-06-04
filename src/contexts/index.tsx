@@ -16,7 +16,6 @@ export const CartContext = createContext({} as CartContextProps);
 export const CartProvider = ({ children }: any) => {
     const [cart, setCart] = useState(JSON.parse(Cookies.get('cart') || '[]'))
     const [openCart, setOpenCart] = useState(true)
-    console.log({ cart })
     return (
         <CartContext.Provider value={{ cart, setCart, setOpenCart, openCart }}>
             {children}

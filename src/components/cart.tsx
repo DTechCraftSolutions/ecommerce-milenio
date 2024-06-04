@@ -12,7 +12,6 @@ export function Cart() {
     const router = useRouter();
     useEffect(() => {
         const cookieCart = Cookies.get("cart")
-        console.log({ cookieCart })
         if (cookieCart) setCart(JSON.parse(cookieCart))
     }, [])
     const handleChangeQuantity = (item_id: string, quantity: number) => {
@@ -59,6 +58,7 @@ export function Cart() {
         setCart(newCart)
         Cookies.set("cart", JSON.stringify(newCart))
     }
+    const totalValue = cart.reduce((acc: number, cartItem: any) => acc + (cartItem.price * cartItem.quantity), 0).toFixed(2)
     return (
         <div className="flex flex-col justify-between">
             <h2 className="mb-4">
@@ -69,9 +69,9 @@ export function Cart() {
                 {
                     cart.map((cartItem: any) => {
                         return (
-                            <div key={cartItem.product_id} className="flex justify-between mt-2 items-center">
-                                <div className="w-12 h-12 rounded-lg  bg-zinc-300" />
-                                <div className="text-xs ml-2 md:m-0 md:text-sm">
+                            <div  key={cartItem.product_id} className="flex justify-between mt-2 items-center">
+                                <div style={{backgroundImage: `url(${cartItem.imageUrl})`}} className="w-12 h-12 rounded-lg bg-cover bg-no-repeat" />
+                                <div className="text-xs text-start w-32 ml-2 md:m-0 md:text-sm">
                                     <p>
                                         {cartItem.name}
                                     </p>
@@ -112,7 +112,7 @@ export function Cart() {
                 </div>
                 <div className="">
                     <p>
-                        Valor total: R$ 300,00
+                        Valor total: R$ {String(totalValue).replace(".", ",")}.
                     </p>
                 </div>
             </div>

@@ -20,7 +20,6 @@ export default function Home() {
       path: "/categories/list",
     })
     if (data) {
-      console.log(data)
       setCategories(data)
       return
     }

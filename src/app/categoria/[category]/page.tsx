@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "@/api";
 import Link from "next/link";
 import { LoadingModal } from "@/components/loader";
+import Image from "next/image";
 const PRODUCTS_PER_PAGE = 8;
 
 export default function Page() {
@@ -38,7 +39,6 @@ export default function Page() {
             path: "/categories/list",
         });
         if (data) {
-            console.log(data);
             setCategories(data);
             return;
         }
@@ -51,7 +51,6 @@ export default function Page() {
             path: `/products/listByCategory/${category}`,
         });
         if (data) {
-            console.log(data);
             setProducts(data);
             return;
         }
@@ -71,7 +70,7 @@ export default function Page() {
     };
 
     useEffect(() => {
-        Promise.all([getCategories(), getProductsByCategory(), getCategoryById()]).then(() => {setLoading(false)});
+        Promise.all([getCategories(), getProductsByCategory(), getCategoryById()]).then(() => { setLoading(false) });
     }, []);
 
     const handleSortChange = (value: string) => {
@@ -150,7 +149,16 @@ export default function Page() {
                     </SelectContent>
                 </Select>
             </div>
-            <div className="w-full lg:w-[95vw] bg-white lg:p-4 rounded-t-3xl justify-center gap-2 lg:gap-4 mt-5 mx-auto grid grid-cols-2 lg:grid-cols-6">
+
+            <div className={`w-full lg:w-[95vw] bg-white p-4 rounded-t-3xl justify-center gap-2 lg:gap-4 mt-5 mx-auto grid ${paginatedProducts.length === 0 ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-6"}`}>
+                {paginatedProducts.length === 0 &&
+                    <div className="flex flex-col justify-center items-center h-96">
+                        <h1 className="text-xl font-bold text-secondary">Nenhum resultado encontrado</h1>
+                        <Image src="/empty.png" width={200} quality={100} height={200} alt="imagem de não encontrado" />
+                        <div></div>
+                    </div>
+
+                    || null}
                 {paginatedProducts.map((product, index) => {
                     const { name, price, valuePromotionInPercent, imageUrl } = product;
                     const priceInRealBrl = price / 100;

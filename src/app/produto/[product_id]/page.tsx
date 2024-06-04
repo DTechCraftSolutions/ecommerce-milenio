@@ -119,7 +119,8 @@ export default function Page({
       product_id: productDetails?.id,
       variant_id: selectedVariant,
       quantity: amount,
-      observation: observation !== observation ? observation : undefined
+      observation: observation !== observation ? observation : undefined,
+      imageUrl: productDetails?.imageUrl
     }
 
     setCart([...cart, newCartItem])
@@ -314,7 +315,7 @@ export default function Page({
               const price = product.price / 100
               const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
               return (
-                <ProductCard key={index} name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} />
+                <ProductCard key={index} id={product.id} name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} />
               )
             })}
           </div>
@@ -387,7 +388,7 @@ export default function Page({
               const price = product.price / 100
               const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
               return (
-                <ProductCard key={index} name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} />
+                <ProductCard key={index} id={product.id} name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} />
               )
             })}
           </div>
@@ -397,7 +398,7 @@ export default function Page({
         </div>
       </div>
       <div className={`fixed ${loading ? "hidden" : ""} md:hidden h-20 pb-4 bg-white left-0 z-50 w-full justify-center flex items-center bottom-0`}>
-        <Button disabled={!selectedVariant} className="w-[90%] bg-primary gap-2 h-12 mt-5">
+        <Button onClick={handleAddToCart} disabled={!selectedVariant} className="w-[90%] bg-primary gap-2 h-12 mt-5">
           <IoBag className="text-xl" />
           Adicionar ao carrinho
         </Button>

@@ -10,10 +10,11 @@ interface IProps {
 
 export function SearchBar({ categories }: IProps) {
     const [isFixed, setIsFixed] = useState("")
+    const [searchTerm, setSearchTerm] = useState("")
 
     const fixSearchBar = () => {
-        if(window.scrollY > 340) {
-            return setIsFixed("fixed py-2 top-10 bg-primary shadow") 
+        if (window.scrollY > 340) {
+            return setIsFixed("fixed py-2 top-10 bg-primary shadow")
         }
         else {
             return setIsFixed("")
@@ -31,18 +32,23 @@ export function SearchBar({ categories }: IProps) {
         <div className={`w-full py-2 mt-5 z-50  flex flex-col ${isFixed} lg:hidden duration-500 justify-center items-center`}>
             <div className="w-[80%] flex items-center rounded bg-zinc-100">
                 <input
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     type="text"
                     className="w-full h-12  pl-4 rounded outline-none bg-transparent"
                     placeholder="Pesquisar..."
+                    onKeyDown={(e) => e.key === "Enter" && router.push(`/pesquisa/${searchTerm}`)}
                 />
-                <IoSearch className="text-xl relative right-4 text-zinc-500" />
+                <button onClick={() => router.push(`/pesquisa/${searchTerm}`)} className="text-xl hover:bg-zinc-200 duration-300 p-3 relative right-4 text-zinc-500">
+                    <IoSearch />
+                </button>
             </div>
-            <ul  className={`flex md:w-4/5 md:flex-wrap w-full h-12 ${isFixed === "" ? "text-primary" : "text-white"} px-4 items-center primary font-medium gap-4 overflow-auto`}>
+            <ul className={`flex md:w-4/5 md:flex-wrap w-full h-12 ${isFixed === "" ? "text-primary" : "text-white"} px-4 items-center primary font-medium gap-4 overflow-auto`}>
                 {categories.map((category: any) => (
                     <li onClick={() => router.push(`/categoria/${category.id}`)} key={category.id}>
                         {category.name}
                     </li>
-                ))}               
+                ))}
             </ul>
         </div>
     )
