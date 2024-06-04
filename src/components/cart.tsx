@@ -69,7 +69,7 @@ export function Cart() {
                 {
                     cart.map((cartItem: any) => {
                         return (
-                            <div className="flex justify-between mt-2 items-center">
+                            <div key={cartItem.product_id} className="flex justify-between mt-2 items-center">
                                 <div className="w-12 h-12 rounded-lg  bg-zinc-300" />
                                 <div className="text-xs ml-2 md:m-0 md:text-sm">
                                     <p>

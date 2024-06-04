@@ -314,7 +314,7 @@ export default function Page({
               const price = product.price / 100
               const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
               return (
-                <ProductCard name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} key={index} />
+                <ProductCard key={index} name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} />
               )
             })}
           </div>
@@ -387,7 +387,7 @@ export default function Page({
               const price = product.price / 100
               const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
               return (
-                <ProductCard name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} key={index} />
+                <ProductCard key={index} name={product.name} price={price} image={productDetails.imageUrl} discount={product.valuePromotionInPercent} priceWithDiscount={priceWithDiscount} />
               )
             })}
           </div>
