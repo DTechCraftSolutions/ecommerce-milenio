@@ -78,7 +78,7 @@ export default function Page({
                         </div>
                     </div>
                     <div className="bg-white lg:w-4/5 shadow-md mx-auto rounded-3xl pb-10">
-                        <div className="lg:grid flex flex-wrap justify-center items-center lg:px-8 lg:grid-cols-4 w-full py-4">
+                        <div className="lg:grid flex gap-4 flex-wrap justify-center items-center lg:px-8 lg:grid-cols-4 w-full py-4">
                             {products.length > 0 ? products.map((product: any, index: number) => {
                                 const price = product.price / 100
                                 const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
