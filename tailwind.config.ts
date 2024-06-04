@@ -21,6 +21,7 @@ const config = {
       colors: {
         primary: "#222961",
         secondary: "#DC0000",
+        gradient: "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 67.08%)",
       },
       keyframes: {
         "accordion-down": {

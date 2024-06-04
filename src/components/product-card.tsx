@@ -16,9 +16,9 @@ export function ProductCard({ name, price, image, priceWithDiscount, discount, i
     return (
         <div className="w-44 lg:w-48 rounded-2xl">
             <div style={{ backgroundImage: `url(${image})` }} className="w-full flex items-end rounded h-[230px] md:h-[250px] bg-cover bg-no-repeat">
-                <p className="text-center w-full text-sm text-white">
+                <div className="text-center h-full flex items-end justify-center  bg-gradient-to-b from-[rgba(0,0,0,0.0)] to-[rgba(0,0,0,0.7)] bg-cover bg-no-repeat z-30 w-full text-sm text-white">
                     {name}
-                </p>
+                </div>
             </div>
             <div className="h-12 flex flex-col justify-center">
             {

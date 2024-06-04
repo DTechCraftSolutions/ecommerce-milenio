@@ -98,7 +98,7 @@ export function Header({ animation, categories }: IHeader) {
                                     ))}
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
-                            <button className="hover:bg-zinc-400 h-10 hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded ">
+                            <button onClick={() => router.push("/categoria/promocoes")} className="hover:bg-zinc-400 h-10 hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded ">
                                 Promoções
                             </button>
                         </div>
