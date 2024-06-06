@@ -63,9 +63,13 @@ export function Header({ animation, categories }: IHeader) {
                         type="text"
                         className="w-full h-12  pl-4 rounded outline-none bg-transparent"
                         placeholder="Pesquisar..."
-                        onKeyDown={(e) => e.key === "Enter" && router.push(`/pesquisa/${search}`)}
+                        onKeyDown={(e) => e.key === "Enter" && search !== "" && router.push(`/pesquisa/${search}`)}
                     />
-                    <button onClick={() => router.push(`/pesquisa/${search}`)} className="text-xl hover:bg-zinc-200 duration-300 p-3 relative right-4 text-zinc-500">
+                    <button onClick={() => {
+                        if (search !== "") {
+                            router.push(`/pesquisa/${search}`)
+                        }
+                    }} className="text-xl hover:bg-zinc-200 duration-300 p-3 relative right-4 text-zinc-500">
                         <IoSearch />
                     </button>
                 </div>

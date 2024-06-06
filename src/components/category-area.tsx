@@ -52,7 +52,7 @@ export function CategoryArea({ category }: ICategoryArea) {
 
     const productsSliced = products.length > 6 ? products.slice(0, 6) : products
     return (
-        <div className={`w-full h-[390px] ${productsSliced.length === 0 ? "hidden" : ""} md:h-[450px] rounded-2xl `}>
+        <div className={`w-full ${productsSliced.length === 0 ? "hidden" : ""}  rounded-2xl `}>
             <div className="flex w-full lg:w-4/5 lg:mx-auto  px-4 items-center justify-between">
                 <h3 className="text-2xl text-primary font-medium">
                     {category.name}

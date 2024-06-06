@@ -57,6 +57,21 @@ export default function Page() {
         return console.log("error");
     };
 
+    const getProductsInPromotion = async () => {
+        if (category === "promocoes") {
+
+            const data = await fetchApi({
+                method: "get",
+                path: "products/listPromotion",
+            });
+            if (data) {
+                setProducts(data);
+                return;
+            }
+            return console.log("error");
+        }
+    };
+
     const getCategoryById = async () => {
         const data = await fetchApi({
             method: "get",
@@ -70,7 +85,7 @@ export default function Page() {
     };
 
     useEffect(() => {
-        Promise.all([getCategories(), getProductsByCategory(), getCategoryById()]).then(() => { setLoading(false) });
+        Promise.all([getCategories(), getProductsByCategory(), getCategoryById(), getProductsInPromotion()]).then(() => { setLoading(false) });
     }, []);
 
     const handleSortChange = (value: string) => {
@@ -116,7 +131,7 @@ export default function Page() {
                 </ul>
             </div>
             <div className="w-4/5 mx-auto flex justify-center md:hidden items-center pt-52 lg:pt-40">
-                <h2 className="text-primary text-2xl font-semibold">{categoryDetail?.name}</h2>
+                <h2 className="text-primary text-2xl font-semibold">{category === "promocoes" ? "Promocões" : categoryDetail?.name}</h2>
                 <IoArrowBack
                     onClick={() => router.push("/")}
                     className="text-primary cursor-pointer text-2xl absolute left-10 hover:bg-primary p-1 rounded hover:text-white duration-500"
@@ -134,7 +149,7 @@ export default function Page() {
                     </BreadcrumbList>
                 </Breadcrumb>
                 <h2 className="text-start text-3xl font-bold text-primary">
-                    {categoryDetail?.name}
+                    {category === "promocoes" ? "Promocões" : categoryDetail?.name}
                 </h2>
             </div>
             <div className="w-full lg:w-[95vw] mx-auto flex md:justify-start justify-center mt-5">

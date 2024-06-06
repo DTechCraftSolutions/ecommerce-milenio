@@ -40,9 +40,13 @@ export function SearchBar({ categories }: IProps) {
                     type="text"
                     className="w-full h-12 pl-4 rounded outline-none bg-transparent"
                     placeholder="Pesquisar..."
-                    onKeyDown={(e) => e.key === "Enter" && router.push(`/pesquisa/${searchTerm}`)}
+                    onKeyDown={(e) => e.key === "Enter" && searchTerm !== "" && router.push(`/pesquisa/${searchTerm}`)}
                 />
-                <button onClick={() => router.push(`/pesquisa/${searchTerm}`)} className="text-xl hover:bg-zinc-200 duration-300 p-3 relative right-4 text-zinc-500">
+                <button onClick={() => {
+                    if (searchTerm !== "") {
+                        router.push(`/pesquisa/${searchTerm}`);
+                    }
+                }} className="text-xl hover:bg-zinc-200 duration-300 p-3 relative right-4 text-zinc-500">
                     <IoSearch />
                 </button>
             </div>

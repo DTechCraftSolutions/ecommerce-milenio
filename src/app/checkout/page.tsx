@@ -4,14 +4,32 @@ import { FormInput } from "@/components/form-input";
 import { Header } from "@/components/header";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { CartContext } from "@/contexts";
 import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
 import { BiArrowBack, BiUser } from "react-icons/bi";
 import { IoHome } from "react-icons/io5";
 import { MdDeliveryDining, MdOutlineAttachMoney } from "react-icons/md";
 import { RiFilePaperLine } from "react-icons/ri";
 
 export default function Checkout() {
+    const { cart, setCart } = useContext(CartContext)
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
+    const [neighborhood, setNeighborhood] = useState("")
+    const [street, setStreet] = useState("")
+    const [number, setNumber] = useState("")
+    const [city, setCity] = useState("")
+    const [state, setState] = useState("")
+    const [zipCode, setZipCode] = useState("")
+    const [coupon, setCoupon] = useState("")
+
+    const totalSum = cart.reduce((acc, item) => acc + item.quantity * item.price, 0).toFixed(2)
     const router = useRouter()
+
+    const createOrder = async () => {
+    }
     return (
         <div className="w-screen min-h-screen pb-20 bg-gray-200">
             <Header animation={false} />
@@ -43,9 +61,9 @@ export default function Checkout() {
                                 Dados Pessoais
                             </div>
                             <div className="w-full px-2 py-2 lg:grid lg:grid-cols-1 lg:gap-4">
-                                <FormInput width="lg:w-4/5" label="Nome" type="text" name="name" placeholder="Nome" value="" onChange={() => { }} />
-                                <FormInput width="lg:w-4/5" label="Email" type="email" name="email" placeholder="Email" value="" onChange={() => { }} />
-                                <FormInput width="lg:w-4/5" label="Telefone" type="text" name="telefone" placeholder="Telefone" value="" onChange={() => { }} />
+                                <FormInput width="lg:w-4/5" label="Nome" type="text" name="name" placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} />
+                                <FormInput width="lg:w-4/5" label="Email" type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <FormInput width="lg:w-4/5" label="Telefone" type="text" name="telefone" placeholder="Telefone" value={phone} onChange={(e) => setPhone(e.target.value)} />
                             </div>
                         </div>
                         <div className="w-full">
@@ -54,9 +72,12 @@ export default function Checkout() {
                                 Endereço
                             </div>
                             <div className="w-full px-2 py-2 lg:grid lg:grid-cols-2 lg:gap-4">
-                                <FormInput label="Endereço" type="text" name="endereco" placeholder="Endereço" value="" onChange={() => { }} />
-                                <FormInput label="Cidade" type="text" name="cidade" placeholder="Cidade" value="" onChange={() => { }} />
-                                <FormInput label="CEP" type="text" name="cep" placeholder="CEP" value="" onChange={() => { }} />
+                                <FormInput label="Bairro" type="text" name="endereco" placeholder="Bairro" value={neighborhood} onChange={(e) => setNeighborhood(e.target.value)} />
+                                <FormInput label="Rua" type="text" name="endereco" placeholder="Rua" value={street} onChange={(e) => setStreet(e.target.value)} />
+                                <FormInput label="Numero" type="text" name="endereco" placeholder="Numero" value={number} onChange={(e) => setNumber(e.target.value)} />
+                                <FormInput label="Cidade" type="text" name="cidade" placeholder="Cidade" value={city} onChange={(e) => setCity(e.target.value)} />
+                                <FormInput label="CEP" type="text" name="cep" placeholder="CEP" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
+                                <FormInput label="UF" type="text" name="complemento" placeholder="UF" value={state} onChange={(e) => setState(e.target.value)} />
                                 <FormInput label="Complemento" type="text" name="complemento" placeholder="Complemento" value="" onChange={() => { }} />
                             </div>
                         </div>
@@ -74,14 +95,18 @@ export default function Checkout() {
                                 <label className="font-medium text-sm" htmlFor="">
                                     Cupom de desconto
                                 </label>
-                                <input type="text" placeholder="Inserir cupom" className="w-full mt-1 h-10 lg:h-12 px-4 rounded bg-zinc-100" />
+                                <input type="text" placeholder="Inserir cupom" value={coupon} onChange={(e) => setCoupon(e.target.value)} className="w-full mt-1 h-10 lg:h-12 px-4 rounded bg-zinc-100" />
                             </div>
                             <button className="w-full mt-3 h-10 lg:h-12 bg-primary hover:bg-opacity-90 duration-300 text-white px-4 rounded lg:w-auto lg:mt-0">Aplicar</button>
                         </div>
                         <div className="w-full px-2 py-5 lg:px-16">
                             <div className="w-full mx-auto py-5 gap-2 flex flex-col justify-center items-center lg:w-1/2">
-                                <p className="text-sm">2x farda curso militar - R$ 100,00</p>
-                                <p className="text-sm font-bold">TOTAL: R$ 200,00</p>
+                                {cart ? cart.map((item)=>{
+                                    return (
+                                        <p className="text-sm">{item.quantity}x {item.name} - R$ {String(item.price.toFixed(2)).replace(".", ",")}</p>
+                                    )
+                                }) : null}
+                                <p className="text-sm font-bold">TOTAL: R$ {String(totalSum).replace(".", ",")}</p>
                             </div>
                         </div>
                         <div className="justify-center items-center flex w-full">

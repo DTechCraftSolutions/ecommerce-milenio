@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { CartContext } from "@/contexts";
 import { useRouter } from "next/navigation";
@@ -6,117 +6,123 @@ import { useContext, useEffect, useState } from "react";
 import { BiTrash } from "react-icons/bi";
 import Cookies from "js-cookie";
 
+interface CartItem {
+    product_id: string;
+    item_id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    variantName: string;
+    imageUrl: string;
+}
+
 export function Cart() {
-    const { cart, setCart } = useContext(CartContext)
-    const [quantity, setQuantity] = useState(0);
+    const { cart, setCart } = useContext(CartContext);
+    const [quantity, setQuantity] = useState<number>(0);
     const router = useRouter();
+    
     useEffect(() => {
-        const cookieCart = Cookies.get("cart")
-        if (cookieCart) setCart(JSON.parse(cookieCart))
-    }, [])
+        const cookieCart = Cookies.get("cart");
+        if (cookieCart) setCart(JSON.parse(cookieCart));
+    }, [setCart]);
+    
     const handleChangeQuantity = (item_id: string, quantity: number) => {
-        const newCart = cart.map((cartItem: any) => {
+        const newCart = cart.map((cartItem: CartItem) => {
             if (cartItem.item_id === item_id) {
-                return {
-                    ...cartItem,
-                    quantity
-                }
+                return { ...cartItem, quantity };
             }
-            return cartItem
-        })
-        setCart(newCart)
-        Cookies.set("cart", JSON.stringify(newCart))
-    }
+            return cartItem;
+        });
+        setCart(newCart);
+        Cookies.set("cart", JSON.stringify(newCart));
+    };
+
     const handleSumOne = (product_id: string) => {
-        const newCart = cart.map((cartItem: any) => {
+        const newCart = cart.map((cartItem: CartItem) => {
             if (cartItem.product_id === product_id) {
-                return {
-                    ...cartItem,
-                    quantity: cartItem.quantity + 1
-                }
+                return { ...cartItem, quantity: cartItem.quantity + 1 };
             }
-            return cartItem
-        })
-        setCart(newCart)
-        Cookies.set("cart", JSON.stringify(newCart))
-    }
+            return cartItem;
+        });
+        setCart(newCart);
+        Cookies.set("cart", JSON.stringify(newCart));
+    };
+
     const handleDelete = (product_id: string) => {
-        const newCart = cart.filter((cartItem: any) => cartItem.product_id !== product_id)
-        setCart(newCart)
-        Cookies.set("cart", JSON.stringify(newCart))
-    }
+        const newCart = cart.filter((cartItem: CartItem) => cartItem.product_id !== product_id);
+        setCart(newCart);
+        Cookies.set("cart", JSON.stringify(newCart));
+    };
+
     const handleSubOne = (product_id: string) => {
-        const newCart = cart.map((cartItem: any) => {
-            if (cartItem.product_id === product_id) {
-                return {
-                    ...cartItem,
-                    quantity: cartItem.quantity - 1
-                }
+        const newCart = cart.map((cartItem: CartItem) => {
+            if (cartItem.product_id === product_id && cartItem.quantity > 1) {
+                return { ...cartItem, quantity: cartItem.quantity - 1 };
             }
-            return cartItem
-        })
-        setCart(newCart)
-        Cookies.set("cart", JSON.stringify(newCart))
-    }
-    const totalValue = cart.reduce((acc: number, cartItem: any) => acc + (cartItem.price * cartItem.quantity), 0).toFixed(2)
+            return cartItem;
+        });
+        setCart(newCart);
+        Cookies.set("cart", JSON.stringify(newCart));
+    };
+
+    const totalValue = cart.reduce((acc: number, cartItem: CartItem) => acc + (cartItem.price * cartItem.quantity), 0).toFixed(2);
+
     return (
-        <div className="flex flex-col justify-between">
-            <h2 className="mb-4">
+        <div className="flex flex-col justify-between p-4 lg:h-[90vh] bg-white shadow-md rounded-lg max-w-2xl mx-auto">
+            <h2 className="mb-4 text-2xl font-semibold text-gray-700">
                 Sacola
             </h2>
-            <div className="flex flex-col gap-2 w-full no-scrollbar overflow-y-scroll h-[65vh]">
-                {cart.length === 0 ? "Sua sacola está vazia" : null}
+            <div className="flex flex-col no-scrollbar gap-2 w-full overflow-y-scroll h-[65vh]">
+                {cart.length === 0 ? <p className="text-gray-500">Sua sacola está vazia</p> : null}
                 {
-                    cart.map((cartItem: any) => {
-                        return (
-                            <div  key={cartItem.product_id} className="flex justify-between mt-2 items-center">
-                                <div style={{backgroundImage: `url(${cartItem.imageUrl})`}} className="w-12 h-12 rounded-lg bg-cover bg-no-repeat" />
-                                <div className="text-xs text-start w-32 ml-2 md:m-0 md:text-sm">
-                                    <p>
-                                        {cartItem.name}
-                                    </p>
-                                    <p>
-                                        R$ {cartItem.price}
-                                    </p>
-                                    <p>
-                                        {cartItem.variantName}
-                                    </p>
-                                </div>
-                                <div className=" flex flex-col items-end">
-                                    <BiTrash onClick={() => handleDelete(cartItem.product_id)} className="bg-red-500  cursor-pointer float-start text-white hover:bg-opacity-90 frounded-lg w-5 h-5 font-light p-1 rounded duration-300" />
-                                    <div className="flex gap-1">
-                                        <button type="button" onClick={() => {
-                                            if (cartItem.quantity > 0) handleSubOne(cartItem.product_id)
-                                        }} className="text-primary curson-pointer w-8 h-8 hover:text-primary/80 font-light p-1 rounded duration-300">
-                                            -
-                                        </button>
-                                        <input value={cartItem.quantity} onChange={(e) => handleChangeQuantity(cartItem.product_id, parseInt(e.target.value))} type="text" className="w-10 text-center" />
-                                        <button type="button" onClick={() => handleSumOne(cartItem.product_id)} className="text-primary w-8 h-8 hover:text-primary/80 font-light p-1 rounded duration-300">
-                                            +
-                                        </button>
-                                    </div>
+                    cart.map((cartItem: CartItem) => (
+                        <div key={cartItem.product_id} className="flex justify-between items-center p-2 bg-gray-50 rounded-lg shadow-sm">
+                            <div style={{ backgroundImage: `url(${cartItem.imageUrl})` }} className="w-16 h-16 lg:mr-4 rounded-lg bg-cover bg-center" />
+                            <div className="flex flex-col w-32 ml-2 md:m-0">
+                                <p className="text-sm font-semibold text-gray-800">
+                                    {cartItem.name}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    R$ {cartItem.price.toFixed(2).replace(".", ",")}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                    {cartItem.variantName}
+                                </p>
+                            </div>
+                            <div className="flex flex-col items-end">
+                                <BiTrash onClick={() => handleDelete(cartItem.product_id)} className="text-red-500 cursor-pointer w-6 h-6 hover:text-red-600 transition duration-300" />
+                                <div className="flex mt-2 gap-2 items-center">
+                                    <button type="button" onClick={() => handleSubOne(cartItem.product_id)} className="text-gray-500 w-6 h-6 hover:text-gray-700 transition duration-300">
+                                        -
+                                    </button>
+                                    <input value={cartItem.quantity} onChange={(e) => handleChangeQuantity(cartItem.item_id, parseInt(e.target.value) || 1)} type="text" className="w-8 text-center border rounded-md" />
+                                    <button type="button" onClick={() => handleSumOne(cartItem.product_id)} className="text-gray-500 w-6 h-6 hover:text-gray-700 transition duration-300">
+                                        +
+                                    </button>
                                 </div>
                             </div>
-
-                        )
-                    })
+                        </div>
+                        
+                    ))
                 }
             </div>
-            <div className="flex w-full flex-col gap-2 bg-white  mt-4 items-end">
-                <div className="flex flex-col gap-1 ">
-                    <label htmlFor="">Calcular frete</label>
-                    <div className="flex w-full gap-2 items-center">
-                        <input placeholder="CEP" type="text" className="w-full h-8 pl-4 rounded outline-none bg-transparent border-[0.5px] border-zinc-300" />
-                        <button type="button" className="bg-primary px-4 text-white h-8 rounded hover:bg-primary/80 font-medium">Aplicar</button>
+            <div className="flex flex-col w-full gap-2 mt-4 items-end">
+                <div className="flex flex-col gap-1 w-full">
+                    <label htmlFor="cep" className="text-gray-600">Calcular frete</label>
+                    <div className="flex gap-2 items-center">
+                        <input id="cep" placeholder="CEP" type="text" className="w-full h-10 pl-4 rounded-md border border-gray-300" />
+                        <button type="button" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition duration-300">Aplicar</button>
                     </div>
                 </div>
-                <div className="">
-                    <p>
+                <div className="text-right">
+                    <p className="text-gray-700 font-semibold">
                         Valor total: R$ {String(totalValue).replace(".", ",")}.
                     </p>
                 </div>
             </div>
-            <button onClick={() => router.push('/checkout')} type="button" className="bg-primary w-full h-10 hover:bg-primary/80 text-white font-medium rounded mt-4">Finalizar Compra</button>
+            <button onClick={() => router.push('/checkout')} type="button" className="bg-primary w-full py-2 text-white font-medium rounded-md mt-4 hover:bg-primary/80 transition duration-300">
+                Finalizar Compra
+            </button>
         </div>
     );
 }

@@ -67,7 +67,7 @@ export default function Page({
                         </h2>
 
                     </div>
-                    <div className="flex justify-between my-4 gap-2 items-center text-lg text-primary font-medium py-3 border-b-[0.5px]">
+                    <div className="flex lg:hidden justify-between my-4 gap-2 items-center text-lg text-primary font-medium py-3 border-b-[0.5px]">
                         <BiArrowBack onClick={() => router.push("/")} className="text-2xl text-primary float-left" />
                         <h2 className="mr-6 text-start text-2xl flex items-center gap-2 font-bold text-primary ">
                             <IoSearch />

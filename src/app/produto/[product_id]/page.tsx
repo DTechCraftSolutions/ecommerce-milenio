@@ -248,13 +248,13 @@ export default function Page({
 
                 :
                 variants?.map((variant: any, index: number) => (
-                  <div onClick={() => setSelectedVariant(() => {
+                  <button onClick={() => setSelectedVariant(() => {
                     if (variant.amount > 0) setSelectedVariant(variant.id)
                     if (selectedVariant === variant.id) setSelectedVariant("")
                   })} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
                     {variant.name}
                     {variant.amount === 0 && <p className="text-red-500 ml-2">Esgotado!</p>}
-                  </div>
+                  </button>
                 ))
               }
             </div>
@@ -333,16 +333,22 @@ export default function Page({
           Variação
         </h3>
         <div className="w-full flex gap-2 flex-wrap  mt-5">
-          {variants.map((variant: any, index: number) => (
-            <div key={index} onClick={() => {
-              if (selectedVariant === variant.id) return setSelectedVariant("")
-              if (variant.amount > 0) setSelectedVariant(variant.id)
-            }} className={` h-14 flex justify-center rounded ${variant.amount === 0 ? "text-red bg-opacity-60" : "cursor-pointer"} items-center text-lg font-medium px-4 ${selectedVariant === variant.id ? "bg-primary text-white" : "bg-zinc-200 text-primary"}`}>
-              {variant.name}
-              {variant.amount === 0 && <span className="ml-2">Indisponível</span>}
+          {variants.length === 0 ?
+            <div>
+              <p className="text-red-500 font-medium text-xl">Esgotado!</p>
             </div>
-          ))}
 
+            :
+            variants?.map((variant: any, index: number) => (
+              <div onClick={() => setSelectedVariant(() => {
+                if (variant.amount > 0) setSelectedVariant(variant.id)
+                if (selectedVariant === variant.id) setSelectedVariant("")
+              })} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
+                {variant.name}
+                {variant.amount === 0 && <p className="text-red-500 ml-2">Esgotado!</p>}
+              </div>
+            ))
+          }
         </div>
         <div className="flex items-end w-full mt-5 justify-between">
           <div>
@@ -386,7 +392,7 @@ export default function Page({
         </p>
         <h3 className="text-primary my-5 font-bold">Veja mais</h3>
         <div className="w-full overflow-x-scroll">
-          <div className="w-[350vw] grid grid-cols-8">
+          <div className="flex flex-wrap justify-between gap-5 ">
             {relationedProducts?.map((product: any, index: number) => {
               const price = product.price / 100
               const priceWithDiscount = product.valuePromotionInPercent ? (product.price / 100) - (product.price / 100) * (product.valuePromotionInPercent / 100) : (product.price / 100)
