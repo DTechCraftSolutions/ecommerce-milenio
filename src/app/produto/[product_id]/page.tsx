@@ -44,7 +44,7 @@ export default function Page({
   const [categories, setCategories] = useState<any>([])
   const [observation, setObservation] = useState("")
   const [openCart, setOpenCart] = useState(false)
-  const { cart, setCart} = useContext(CartContext)
+  const { cart, setCart } = useContext(CartContext)
   const getProductById = async () => {
     const response = await fetchApi({
       path: `/products/getById/${product_id}`,
@@ -143,7 +143,7 @@ export default function Page({
   const router = useRouter()
   return (
     loading ? <div><LoadingModal loading={loading} /></div> : <div className="w-full min-h-screen lg:bg-gray-200 pb-8">
-      <div className="w-full md:px-10 h-16 md:h-28 px-4 flex bg-primary z-30 items-center text-white md:bg-primary justify-between  fixed">
+      <div className="w-full md:px-10  h-16 md:h-28 px-4 flex bg-primary z-50 items-center text-white md:bg-primary justify-between  fixed">
         <button onClick={() => router.back()} className="md:hidden">
           <IoArrowBack className="text-2xl" />
         </button>
@@ -209,7 +209,10 @@ export default function Page({
       </div>
       {/* imagem mobile */}
       <div className="h-16"></div>
-      <div style={{ backgroundImage: `url(${productDetails?.imageUrl})` }} className="w-full h-[60vh] md:hidden  justify-end flex flex-col items-center bg-cover bg-no-repeat">
+      <div style={{ backgroundImage: `url(${productDetails?.imageUrl})` }} className="w-full h-[60vh] md:hidden bg-center justify-end flex flex-col items-center bg-cover bg-no-repeat">
+        <div className="w-full h-full -z-10 bg-gradient-to-b from-[rgba(0,0,0,0.0)] to-[rgba(0,0,0,0.2)]">
+
+        </div>
       </div>
       {/* Desktop */}
       <div className="hidden  pt-32 md:block">
@@ -228,7 +231,7 @@ export default function Page({
           </h2>
         </div>
         <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-t-3xl shadow-md justify-between  ">
-          <div style={{ backgroundImage: `url(${productDetails.imageUrl})` }} className="w-[35%] h-full rounded-lg flex justify-center items-end bg-cover bg-no-repeat">
+          <div style={{ backgroundImage: `url(${productDetails.imageUrl})` }} className="w-[35%] h-full shadow-lg rounded-lg flex justify-center items-end bg-cover bg-center bg-no-repeat">
             <div className=" justify-between w-14 flex mb-5 items-center">
 
             </div>
@@ -294,7 +297,7 @@ export default function Page({
                       </h3>
                     </div>
                 }
-                <Button onClick={handleAddToCart} disabled={!selectedVariant} className="gap-4 shadow bg-primary mt-5 h-10 px-10">
+                <Button onClick={handleAddToCart} disabled={!selectedVariant} className="gap-4 shadow bg-primary mt-5 -z-30 h-10 px-10">
                   <IoBag className="text-white shadow text-xl" />
                   Adicionar
                 </Button>
@@ -322,7 +325,7 @@ export default function Page({
         </div>
       </div>
       {/* Mobile */}
-      <div className="w-full h-40 md:hidden pt-8 bg-white md:rounded-none px-4 rounded-t-3xl md:mt-0 -mt-16">
+      <div className="w-full h-40 md:hidden pt-8  bg-white md:rounded-none px-4 rounded-t-3xl md:mt-0 -mt-16">
         <h2 className="w-full text-center text-2xl font-bold text-primary ">
           {productDetails?.name}
         </h2>
