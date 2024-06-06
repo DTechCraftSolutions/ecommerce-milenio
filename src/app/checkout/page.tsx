@@ -103,7 +103,7 @@ export default function Checkout() {
                             <div className="w-full mx-auto py-5 gap-2 flex flex-col justify-center items-center lg:w-1/2">
                                 {cart ? cart.map((item)=>{
                                     return (
-                                        <p className="text-sm">{item.quantity}x {item.name} - R$ {String(item.price.toFixed(2)).replace(".", ",")}</p>
+                                        <p key={item.product_id} className="text-sm">{item.quantity}x {item.name} - R$ {String(item.price.toFixed(2)).replace(".", ",")}</p>
                                     )
                                 }) : null}
                                 <p className="text-sm font-bold">TOTAL: R$ {String(totalSum).replace(".", ",")}</p>
