@@ -69,7 +69,7 @@ export function Cart() {
     const totalValue = cart.reduce((acc: number, cartItem: CartItem) => acc + (cartItem.price * cartItem.quantity), 0).toFixed(2);
 
     return (
-        <div className="flex flex-col justify-between p-4 h-[78%] lg:h-[90%] bg-white shadow-md rounded-lg max-w-2xl mx-auto">
+        <div className="flex flex-col justify-between p-4 h-[82%] lg:h-[90%] bg-white shadow-md rounded-lg max-w-2xl mx-auto">
             <h2 className="mb-4 text-2xl font-semibold text-gray-700">
                 Sacola
             </h2>
