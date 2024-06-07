@@ -37,7 +37,7 @@ export default function Page({
 
   const [productDetails, setProductDetails] = useState<any>({})
   const [variants, setVariants] = useState<any>([])
-  const [selectedVariant, setSelectedVariant] = useState<any>()
+  const [selectedVariant, setSelectedVariant] = useState<any>("")
   const [relationedProducts, setRelationedProducts] = useState<any>([])
   const [amount, setAmount] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -248,16 +248,14 @@ export default function Page({
 
                 :
                 variants?.map((variant: any, index: number) => (
-                  <button onClick={() => setSelectedVariant(() => {
+                  <button onClick={() => {
                     if (variant.amount > 0) {
-                      console.log("setSelectedVariant com " + variant.id)
                       setSelectedVariant(variant.id)
                     }
                     if (selectedVariant === variant.id) {
-                      console.log("setSelectedVariant com vazio")
                       setSelectedVariant("")
                     }
-                  })} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
+                  }} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
                     {variant.name}
                     {variant.amount === 0 && <p className="text-red-500 ml-2">Esgotado!</p>}
                   </button>
@@ -346,10 +344,10 @@ export default function Page({
 
             :
             variants?.map((variant: any, index: number) => (
-              <div onClick={() => setSelectedVariant(() => {
+              <div onClick={() => {
                 if (variant.amount > 0) setSelectedVariant(variant.id)
                 if (selectedVariant === variant.id) setSelectedVariant("")
-              })} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
+              }} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
                 {variant.name}
                 {variant.amount === 0 && <p className="text-red-500 ml-2">Esgotado!</p>}
               </div>
