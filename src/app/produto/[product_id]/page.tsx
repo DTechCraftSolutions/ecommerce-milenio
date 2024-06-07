@@ -124,7 +124,7 @@ export default function Page({
     }
 
     setCart([...cart, newCartItem])
-    localStorage.setItem("cart", JSON.stringify([...cart, newCartItem]))
+    Cookie.set("cart", JSON.stringify([...cart, newCartItem]))
     toast("Produto adicionado!", {
       description: `${productDetails.name}, ${amount} ${amount === 1 ? "unidade" : "unidades"}`,
       action: {

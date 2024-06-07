@@ -22,7 +22,7 @@ export function Cart() {
     const router = useRouter();
     
     useEffect(() => {
-        const cookieCart = localStorage.getItem("cart");
+        const cookieCart = Cookies.get("cart");
         if (cookieCart) setCart(JSON.parse(cookieCart));
     }, [setCart]);
     
@@ -34,7 +34,7 @@ export function Cart() {
             return cartItem;
         });
         setCart(newCart);
-        localStorage.setItem("cart", JSON.stringify(newCart));
+        Cookies.set("cart", JSON.stringify(newCart));
     };
     
     const handleSumOne = (product_id: string) => {
@@ -45,13 +45,13 @@ export function Cart() {
             return cartItem;
         });
         setCart(newCart);
-        localStorage.setItem("cart", JSON.stringify(newCart));
+        Cookies.set("cart", JSON.stringify(newCart));
     };
 
     const handleDelete = (product_id: string) => {
         const newCart = cart.filter((cartItem: CartItem) => cartItem.product_id !== product_id);
         setCart(newCart);
-        localStorage.setItem("cart", JSON.stringify(newCart));
+        Cookies.set("cart", JSON.stringify(newCart));
     };
 
     const handleSubOne = (product_id: string) => {
@@ -62,7 +62,7 @@ export function Cart() {
             return cartItem;
         });
         setCart(newCart);
-        localStorage.setItem("cart", JSON.stringify(newCart));
+        Cookies.set("cart", JSON.stringify(newCart));
     };
 
     const totalValue = cart.reduce((acc: number, cartItem: CartItem) => acc + (cartItem.price * cartItem.quantity), 0).toFixed(2);
