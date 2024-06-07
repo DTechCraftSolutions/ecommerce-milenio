@@ -22,9 +22,9 @@ export function BannerCaroussel() {
             onMouseLeave={plugin.current.reset}
             className="w-[92%] lg:mt-24 md:w-[75%] mx-auto -z-0   max-w-full">
             <CarouselContent className="w-full ">
-                <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-center bg-cover md:h-96 h-48">...</CarouselItem>
-                <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-center bg-cover md:h-96 h-48">...</CarouselItem>
-                <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-center bg-cover md:h-96 h-48">...</CarouselItem>
+                <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-center bg-cover md:h-96 h-48"></CarouselItem>
+                <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-center bg-cover md:h-96 h-48"></CarouselItem>
+                <CarouselItem style={{ backgroundImage: "url('/banner.jpg')" }} className="w-full bg-center bg-cover md:h-96 h-48"></CarouselItem>
             </CarouselContent>
             <CarouselPrevious className="hidden md:flex" />
             <CarouselNext className="hidden md:flex" />

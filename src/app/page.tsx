@@ -35,7 +35,7 @@ export default function Home() {
         <HeaderBannerMobile />
         <SocialMediaHeader />
         <SearchBar categories={categories} />
-        <BannerCaroussel />;
+        <BannerCaroussel />
         <div className="flex bg-white py-4 rounded-t-3xl shadow flex-col pb-16 md:pb-96 lg:pb-0 gap-16 ">
           {categories.map((category: any) => (
             <CategoryArea key={category.id} category={category} />
