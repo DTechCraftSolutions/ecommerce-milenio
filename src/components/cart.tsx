@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { BiTrash } from "react-icons/bi";
 import Cookies from "js-cookie";
+import { Button } from "./ui/button";
 
 interface CartItem {
     product_id: string;
@@ -102,7 +103,7 @@ export function Cart() {
                                 </div>
                             </div>
                         </div>
-                        
+
                     ))
                 }
             </div>
@@ -120,9 +121,9 @@ export function Cart() {
                     </p>
                 </div>
             </div>
-            <button onClick={() => router.push('/checkout')} type="button" className="bg-primary w-full py-2 text-white font-medium rounded-md mt-4 hover:bg-primary/80 transition duration-300">
+            <Button disabled={cart.length === 0} onClick={() => router.push('/checkout')} type="button" className="bg-primary w-full py-2 text-white font-medium rounded-md mt-4 hover:bg-primary/80 transition duration-300">
                 Finalizar Compra
-            </button>
+            </Button>
         </div>
     );
 }

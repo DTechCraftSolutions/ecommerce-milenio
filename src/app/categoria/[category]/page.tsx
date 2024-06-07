@@ -33,6 +33,7 @@ export default function Page() {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOrder, setSortOrder] = useState<any>("");
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
     const getCategories = async () => {
         const data = await fetchApi({
             method: "get",
@@ -113,14 +114,25 @@ export default function Page() {
     return (
         <div className="w-screen min-h-screen bg-gray-200 pb-10">
             <Header categories={categories} animation={false} />
-            <div className="w-full fixed top-16 py-4 lg:hidden h-32 bg-primary">
+            <div className="w-full fixed z-50 top-16 py-4 lg:hidden h-32 bg-primary">
                 <div className="w-[80%] flex items-center mx-auto rounded bg-zinc-100">
                     <input
+                        onChange={(e) => setSearch(e.target.value)}
+                        value={search}
                         type="text"
                         className="w-full h-12  pl-4 rounded outline-none bg-transparent"
                         placeholder="Pesquisar..."
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && search !== "") {
+                                router.push(`/pesquisa/${search}`);
+                            }
+                        }}
                     />
-                    <IoSearch className="text-xl relative right-4 text-zinc-500" />
+                    <IoSearch onClick={() => {
+                        if (search !== "") {
+                            router.push(`/pesquisa/${search}`);
+                        }
+                    }} className="text-xl relative right-4 text-zinc-500" />
                 </div>
                 <ul className="flex md:w-4/5 md:flex-wrap w-full h-12 text-white px-4 items-center primary font-medium gap-4 overflow-auto">
                     {categories.map((category) => (
