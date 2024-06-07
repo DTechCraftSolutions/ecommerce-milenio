@@ -19,11 +19,10 @@ interface CartItem {
 
 export function Cart() {
     const { cart, setCart } = useContext(CartContext);
-    const [quantity, setQuantity] = useState<number>(0);
     const router = useRouter();
     
     useEffect(() => {
-        const cookieCart = Cookies.get("cart");
+        const cookieCart = localStorage.getItem("cart");
         if (cookieCart) setCart(JSON.parse(cookieCart));
     }, [setCart]);
     
@@ -35,9 +34,9 @@ export function Cart() {
             return cartItem;
         });
         setCart(newCart);
-        Cookies.set("cart", JSON.stringify(newCart));
+        localStorage.setItem("cart", JSON.stringify(newCart));
     };
-
+    
     const handleSumOne = (product_id: string) => {
         const newCart = cart.map((cartItem: CartItem) => {
             if (cartItem.product_id === product_id) {
@@ -46,13 +45,13 @@ export function Cart() {
             return cartItem;
         });
         setCart(newCart);
-        Cookies.set("cart", JSON.stringify(newCart));
+        localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
     const handleDelete = (product_id: string) => {
         const newCart = cart.filter((cartItem: CartItem) => cartItem.product_id !== product_id);
         setCart(newCart);
-        Cookies.set("cart", JSON.stringify(newCart));
+        localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
     const handleSubOne = (product_id: string) => {
@@ -63,13 +62,13 @@ export function Cart() {
             return cartItem;
         });
         setCart(newCart);
-        Cookies.set("cart", JSON.stringify(newCart));
+        localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
     const totalValue = cart.reduce((acc: number, cartItem: CartItem) => acc + (cartItem.price * cartItem.quantity), 0).toFixed(2);
 
     return (
-        <div className="flex flex-col justify-between p-4 h-[82%] lg:h-[90%] bg-white shadow-md rounded-lg max-w-2xl mx-auto">
+        <div className="flex flex-col justify-between p-4 h-[82%] lg:h-[90%] bg-white rounded-lg max-w-2xl mx-auto">
             <h2 className="mb-4 text-2xl font-semibold text-gray-700">
                 Sacola
             </h2>

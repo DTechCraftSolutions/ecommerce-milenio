@@ -14,7 +14,7 @@ interface CartContextProps {
 export const CartContext = createContext({} as CartContextProps);
 
 export const CartProvider = ({ children }: any) => {
-    const [cart, setCart] = useState(JSON.parse(Cookies.get('cart') || '[]'))
+    const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart') || '[]'))
     const [openCart, setOpenCart] = useState(true)
     return (
         <CartContext.Provider value={{ cart, setCart, setOpenCart, openCart }}>

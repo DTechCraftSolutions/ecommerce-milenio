@@ -4,7 +4,7 @@
 import { IoBag, IoLogoFacebook, IoLogoInstagram, IoLogoWhatsapp, IoMenu, IoSearch } from "react-icons/io5";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -19,6 +19,7 @@ import { CompanyDetails } from "@/info/company-details";
 import { Cart } from "./cart";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CartContext } from "@/contexts";
 
 interface IHeader {
     animation: boolean
@@ -27,6 +28,7 @@ interface IHeader {
 
 export function Header({ animation, categories }: IHeader) {
     const [isVisible, setIsVisible] = useState("opacity-0");
+    const {cart} = useContext(CartContext)
     const [search, setSearch] = useState("");
     function handleScrollToggleVisiblity() {
         if (window.scrollY < 120) {
@@ -75,7 +77,10 @@ export function Header({ animation, categories }: IHeader) {
                 </div>
                 <Sheet >
                     <SheetTrigger>
-                        <IoBag className="text-3xl" />
+                        <div className={`${cart.length > 0 ? "bg-red-500 text-white flex w-4 h-4 rounded-full  float-right relative z-50 full justify-center items-center" : "hidden"}`}>
+                            1
+                        </div>
+                        <IoBag className="text-3xl " />
                     </SheetTrigger>
                     <SheetContent side={"right"}>
                         <Cart />

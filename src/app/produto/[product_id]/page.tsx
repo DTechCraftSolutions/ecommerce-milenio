@@ -124,7 +124,7 @@ export default function Page({
     }
 
     setCart([...cart, newCartItem])
-    Cookie.set("cart", JSON.stringify([...cart, newCartItem]))
+    localStorage.setItem("cart", JSON.stringify([...cart, newCartItem]))
     toast("Produto adicionado!", {
       description: `${productDetails.name}, ${amount} ${amount === 1 ? "unidade" : "unidades"}`,
       action: {
@@ -199,6 +199,9 @@ export default function Page({
         </div>
         <Sheet open={openCart} onOpenChange={setOpenCart}>
           <SheetTrigger>
+            <div className={`${cart.length > 0 ? "bg-red-500 text-white flex w-4 h-4 rounded-full  float-right relative z-50 full justify-center items-center" : "hidden"}`}>
+              1
+            </div>
             <IoBag className="text-2xl " />
           </SheetTrigger>
           <SheetContent>
