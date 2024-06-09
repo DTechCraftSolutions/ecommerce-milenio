@@ -9,11 +9,25 @@ import { LoadingModal } from "@/components/loader";
 import { SearchBar } from "@/components/search-bar";
 import { SocialMediaHeader } from "@/components/social-media-header";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [banners, setBanners] = useState([]);
+
+  const getBanners = async () => {
+    const data = await fetchApi({
+      method: "get",
+      path: "/banners/get-all",
+    })
+    if (data) {
+      return setBanners(data)
+    }
+    return toast.error("Não foi possivel carregar os banners, atualize a página!")
+  }
+  console.log(banners)
   const getCategories = async () => {
     const data = await fetchApi({
       method: "get",
@@ -23,10 +37,10 @@ export default function Home() {
       setCategories(data)
       return
     }
-    return console.log("error")
+    return toast.error("Não foi possivel carregar as categorias, atualize a página!")
   }
   useEffect(() => {
-    Promise.all([getCategories()]).then(() => setIsLoading(false))
+    Promise.all([getCategories(), getBanners()]).then(() => setIsLoading(false))
   },[])
   return (
     <main className="w-screen md:overflow-hidden">
@@ -35,7 +49,7 @@ export default function Home() {
         <HeaderBannerMobile />
         <SocialMediaHeader />
         <SearchBar categories={categories} />
-        <BannerCaroussel />
+        <BannerCaroussel banners={banners} />
         <div className="flex bg-white py-4 rounded-t-3xl shadow flex-col pb-16 md:pb-96 lg:pb-0 gap-16 ">
           {categories.map((category: any) => (
             <CategoryArea key={category.id} category={category} />
