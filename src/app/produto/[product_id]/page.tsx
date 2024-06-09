@@ -45,12 +45,16 @@ export default function Page({
   const [observation, setObservation] = useState("")
   const [openCart, setOpenCart] = useState(false)
   const { cart, setCart } = useContext(CartContext)
+  const [discount, setDiscount] = useState(0)
   const getProductById = async () => {
     const response = await fetchApi({
       path: `/products/getById/${product_id}`,
       method: "post"
     })
     if (response) {
+      if(response.valuePromotionInPercent){
+        setDiscount(response.valuePromotionInPercent/100)
+      }
       return setProductDetails(response)
     }
     return console.log("error")
@@ -300,7 +304,7 @@ export default function Page({
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-primary ">Total R$</h3>
                       <h3 className="font-semibold text-2xl text-primary">
-                        {String((productDetails?.price / 100 * amount).toFixed(2)).replace(".", ",")}
+                        {String(( (productDetails?.price / 100) * amount * (1- (discount))).toFixed(2)).replace(".", ",")}
                       </h3>
                     </div>
                 }
@@ -379,7 +383,7 @@ export default function Page({
               Total R$
             </h3>
             <p className="text-3xl">
-              {loading ? "" : String((productDetails?.price / 100 * amount).toFixed(2)).replace(".", ",")}
+              {loading ? "" : String(( (productDetails?.price / 100) * amount * (1- (discount))).toFixed(2)).replace(".", ",")}
             </p>
           </div>
         </div>

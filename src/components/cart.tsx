@@ -2,7 +2,7 @@
 
 import { CartContext } from "@/contexts";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { BiTrash } from "react-icons/bi";
 import Cookies from "js-cookie";
 import { Button } from "./ui/button";
@@ -20,12 +20,19 @@ interface CartItem {
 export function Cart() {
     const { cart, setCart } = useContext(CartContext);
     const router = useRouter();
-    
+    const inputRef = useRef<HTMLInputElement>(null);
+
     useEffect(() => {
         const cookieCart = Cookies.get("cart");
         if (cookieCart) setCart(JSON.parse(cookieCart));
     }, [setCart]);
-    
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.blur();
+        }
+    }, []);
+
     const handleChangeQuantity = (item_id: string, quantity: number) => {
         const newCart = cart.map((cartItem: CartItem) => {
             if (cartItem.item_id === item_id) {
@@ -36,7 +43,7 @@ export function Cart() {
         setCart(newCart);
         Cookies.set("cart", JSON.stringify(newCart));
     };
-    
+
     const handleSumOne = (product_id: string) => {
         const newCart = cart.map((cartItem: CartItem) => {
             if (cartItem.product_id === product_id) {
@@ -77,7 +84,7 @@ export function Cart() {
                 {
                     cart.map((cartItem: CartItem) => (
                         <div key={cartItem.product_id} className="flex justify-between items-center p-2 bg-gray-50 rounded-lg shadow-sm">
-                            <div style={{ backgroundImage: `url(${cartItem.imageUrl})` }} className="w-16 h-16 lg:mr-4 rounded-lg bg-cover bg-center" />
+                            <div style={{ backgroundImage: `url(${cartItem.imageUrl})` }} className="w-16 h-16 lg:mr-4 hidden lg:grid rounded-lg bg-cover bg-center" />
                             <div className="flex flex-col w-32 ml-2 md:m-0">
                                 <p className="text-sm font-semibold text-gray-800">
                                     {cartItem.name}
@@ -95,14 +102,13 @@ export function Cart() {
                                     <button type="button" onClick={() => handleSubOne(cartItem.product_id)} className="text-gray-500 w-6 h-6 hover:text-gray-700 transition duration-300">
                                         -
                                     </button>
-                                    <input value={cartItem.quantity} onChange={(e) => handleChangeQuantity(cartItem.item_id, parseInt(e.target.value) || 1)} type="text" className="w-8 text-center border rounded-md" />
+                                    <input ref={inputRef} value={cartItem.quantity} onChange={(e) => handleChangeQuantity(cartItem.item_id, parseInt(e.target.value) || 1)} type="text" className="w-8 text-center border rounded-md" />
                                     <button type="button" onClick={() => handleSumOne(cartItem.product_id)} className="text-gray-500 w-6 h-6 hover:text-gray-700 transition duration-300">
                                         +
                                     </button>
                                 </div>
                             </div>
                         </div>
-
                     ))
                 }
             </div>
