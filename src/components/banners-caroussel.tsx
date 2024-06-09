@@ -30,7 +30,7 @@ export function BannerCaroussel({ banners }: BannerCarousselProps) {
                     banners.map((banner) => {
                      
                         return (
-                            <CarouselItem style={{ backgroundImage: `url('${banner.imageUrl}')` }} className="w-full bg-center bg-cover md:h-96 h-48"></CarouselItem>
+                            <CarouselItem key={banner.id} style={{ backgroundImage: `url('${banner.imageUrl}')` }} className="w-full bg-center bg-cover md:h-96 h-48"></CarouselItem>
                         )
                     })
                 }
