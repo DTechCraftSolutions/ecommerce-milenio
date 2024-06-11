@@ -114,7 +114,20 @@ export default function Page({
         onClick: () => setOpenCart(true)
       }
     })
+
+
+
     const variant = variants.find((variant: any) => variant.id === selectedVariant)
+
+    const actualStock = await fetchApi({
+      path: `/variants/${variant.id}`,
+      method: "get"
+    })
+
+    if ( actualStock.amount <= 0) return toast.error("Variação sem estoque!")
+
+ 
+
     const priceWithDiscount = productDetails.valuePromotionInPercent ? (productDetails.price / 100) - (productDetails.price / 100) * (productDetails.valuePromotionInPercent / 100) : (productDetails.price / 100)
     const newCartItem = {
       name: productDetails?.name,
@@ -356,7 +369,7 @@ export default function Page({
                 if (selectedVariant === variant.id) setSelectedVariant("")
               }} key={index} className={`h-10  flex justify-center rounded  items-center ${variant.amount === 0 ? "bg-opacity-60 text-red-500" : "cursor-pointer"}  font-medium px-4 py-2 ${variant.id === selectedVariant ? "bg-primary text-white" : "bg-zinc-200"}`}>
                 {variant.name}
-                {variant.amount === 0 && <p className="text-red-500 ml-2">Esgotado!</p>}
+                {variant.amount <= 0 && <p className="text-red-500 ml-2">Esgotado!</p>}
               </div>
             ))
           }

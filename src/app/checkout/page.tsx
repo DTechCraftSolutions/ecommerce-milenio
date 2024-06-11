@@ -83,6 +83,7 @@ export default function Checkout() {
     }
 
     const createOrder = async () => {
+        let itemsNoStock : any = []
         setLoading(true)
         try {
             if (!name || !email || !phone || !neighborhood || !street || !number || !city || !state || !zipCode) return toast.error('Preencha todos os campos');
@@ -94,13 +95,29 @@ export default function Checkout() {
                     observation: item.observation || ""
                 }
             });
-
+             await Promise.all(products.map(async(item: any) => {
+                const variant = await fetchApi({
+                    path: `/variants/${item.variantId}`,
+                    method: "get"
+                })
+                return variant.amount >0 ? null : itemsNoStock.push({name: variant.name, variantId: item.variantId})
+            }))
+            if(itemsNoStock.length > 0){
+                setLoading(false)
+                toast.error(`Os seguintes itens não possuem estoque: ${itemsNoStock.map((item: any) => {
+                    console.log(item)
+                    const productName = cart.find((cartItem: any) => cartItem.variant_id === item.variantId)?.name
+                    return productName + ` ${item.name}`
+                })}`)
+                return
+            };
+            console.log(products)
             const orderData = {
                 cartItems: products,
                 send_product: false,
                 paymentStatus: "pendente",
                 shippingCost: 0,
-                totalAmount: Number(totalSum) - discount,
+                totalAmount: (Number(totalSum) - discount) * 100, // em centavos
                 user_address: `${street}, ${number}, ${neighborhood}, ${city}, ${state}, ${zipCode}, ${complement}`,
                 user_name: name,
                 user_email: email,
