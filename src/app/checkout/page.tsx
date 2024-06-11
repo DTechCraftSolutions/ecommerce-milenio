@@ -105,13 +105,11 @@ export default function Checkout() {
             if(itemsNoStock.length > 0){
                 setLoading(false)
                 toast.error(`Os seguintes itens não possuem estoque: ${itemsNoStock.map((item: any) => {
-                    console.log(item)
                     const productName = cart.find((cartItem: any) => cartItem.variant_id === item.variantId)?.name
                     return productName + ` ${item.name}`
                 })}`)
                 return
             };
-            console.log(products)
             const orderData = {
                 cartItems: products,
                 send_product: false,

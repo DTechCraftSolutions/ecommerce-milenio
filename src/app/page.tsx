@@ -27,7 +27,6 @@ export default function Home() {
     }
     return toast.error("Não foi possivel carregar os banners, atualize a página!")
   }
-  console.log(banners)
   const getCategories = async () => {
     const data = await fetchApi({
       method: "get",
