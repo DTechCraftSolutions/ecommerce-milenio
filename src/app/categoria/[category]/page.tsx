@@ -112,7 +112,7 @@ export default function Page() {
     };
 
     return (
-        <div className="w-screen min-h-screen bg-gray-200 pb-10">
+        <div className="w-screen min-h-screen  pb-10">
             <Header categories={categories} animation={false} />
             <div className="w-full fixed z-50 top-16 py-4 lg:hidden h-32 bg-primary">
                 <div className="w-[80%] flex items-center mx-auto rounded bg-zinc-100">
@@ -166,7 +166,7 @@ export default function Page() {
             </div>
             <div className="w-full lg:w-[95vw] mx-auto flex md:justify-start justify-center mt-5">
                 <Select onValueChange={handleSortChange}>
-                    <SelectTrigger className="w-72 bg-white h-12 flex items-center justify-between px-2 text-primary border-[0.5px] border-zinc-300 rounded">
+                    <SelectTrigger className="w-72 bg-zinc-300 h-12 flex items-center justify-between px-2 text-primary border-[0.5px] border-zinc-300 rounded">
                         <SelectValue placeholder="Filtre..." />
                         <MdOutlineKeyboardArrowDown className="text-primary" />
                     </SelectTrigger>
@@ -177,7 +177,7 @@ export default function Page() {
                 </Select>
             </div>
 
-            <div className={`w-full lg:w-[95vw] bg-white p-4 rounded-t-3xl justify-center gap-2 lg:gap-4 mt-5 mx-auto grid ${paginatedProducts.length === 0 ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-6"}`}>
+            <div className={`w-full lg:w-[95vw] rounded-t-3xl justify-center gap-2 lg:gap-4 mt-5 mx-auto grid ${paginatedProducts.length === 0 ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-6"}`}>
                 {paginatedProducts.length === 0 &&
                     <div className="flex flex-col justify-center items-center h-96">
                         <h1 className="text-xl font-bold text-secondary">Nenhum resultado encontrado</h1>

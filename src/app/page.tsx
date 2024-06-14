@@ -44,12 +44,12 @@ export default function Home() {
   return (
     <main className="w-screen md:overflow-hidden">
       <Header animation categories={categories} />
-      <div className="pt-16 max-w-full w-full bg-gray-200">
+      <div className="pt-16 max-w-full w-full">
         <HeaderBannerMobile />
         <SocialMediaHeader />
         <SearchBar categories={categories} />
         <BannerCaroussel banners={banners} />
-        <div className="flex bg-white py-4 rounded-t-3xl shadow flex-col pb-16 md:pb-96 lg:pb-0 gap-16 ">
+        <div className="flex bg-white py-4shadow flex-col pb-16 md:pb-96 lg:pb-0 gap-16 ">
           {categories.map((category: any) => (
             <CategoryArea key={category.id} category={category} />
           ))}

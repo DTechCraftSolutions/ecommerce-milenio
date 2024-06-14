@@ -14,11 +14,11 @@ interface IProductCard {
 export function ProductCard({ name, price, image, priceWithDiscount, discount, id }: IProductCard) {
 
     return (
-        <div className="w-44 lg:w-48 rounded-2xl">
+        <div className="w-44 lg:w-48 2xl:w-56 rounded-2xl">
             <div style={{
                 backgroundImage: `url(${image})`,
                 backgroundPosition: "center",
-            }} className="w-full flex items-end rounded h-[230px] md:h-[250px] bg-cover bg-no-repeat">
+            }} className="w-full 2xl:h-[350px] border-[0.5px] flex items-end rounded h-[230px] md:h-[250px] bg-cover bg-no-repeat">
                 <div className="text-center h-full flex items-end justify-center  bg-gradient-to-b from-[rgba(0,0,0,0.0)] to-[rgba(0,0,0,0.7)] bg-cover bg-no-repeat z-30 w-full text-sm text-white">
                     {name}
                 </div>

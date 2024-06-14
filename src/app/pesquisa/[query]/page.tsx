@@ -48,7 +48,7 @@ export default function Page({
     }, [])
     return (
         loading ? <LoadingModal loading={loading} /> : (
-            <div className="w-full bg-gray-200 min-h-screen">
+            <div className="w-full  min-h-screen">
                 <Header categories={categories} animation={false} />
                 <div className="pt-16 lg:pt-32 px-4 lg:px-16">
                     <div className="lg:w-3/4 hidden mx-auto pt-8 lg:flex justify-start border-b-[0.5px] border-zinc-200 pb-2 mb-5 gap-5 items-center">
@@ -77,7 +77,7 @@ export default function Page({
 
                         </div>
                     </div>
-                    <div className="bg-white lg:w-4/5 shadow-md mx-auto rounded-3xl pb-10">
+                    <div className=" lg:w-4/5 shadow-md mx-auto rounded-3xl pb-10">
                         <div className="lg:grid flex gap-4 flex-wrap justify-center items-center lg:px-8 lg:grid-cols-4 w-full py-4">
                             {products.length > 0 ? products.map((product: any, index: number) => {
                                 const price = product.price / 100

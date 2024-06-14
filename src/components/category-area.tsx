@@ -53,7 +53,7 @@ export function CategoryArea({ category }: ICategoryArea) {
     const productsSliced = products.length > 6 ? products.slice(0, 6) : products
     return (
         <div className={`w-full ${productsSliced.length === 0 ? "hidden" : ""}  rounded-2xl `}>
-            <div className="flex w-full lg:w-4/5 lg:mx-auto  px-4 items-center justify-between">
+            <div className="flex w-full  lg:w-4/5 lg:mx-auto  px-4 items-center justify-between">
                 <h3 className="text-2xl text-primary font-medium">
                     {category.name}
                 </h3>
@@ -63,7 +63,7 @@ export function CategoryArea({ category }: ICategoryArea) {
                 </Link>
             </div>
             <div className="w-full overflow-x-scroll lg:flex lg:justify-center lg:overflow-x-hidden">
-                <div className={`${width} mt-5 flex lg:w-4/5 lg:flex-wrap items-center gap-4 lg:px-0 lg:gap-2 px-4`}>
+                <div className={`${width} mt-5 flex 2xl:max-w-[95%]  mx-auto lg:w-4/5 lg:flex-wrap items-center gap-4 lg:px-0 lg:gap-2 px-4`}>
                     {
                         productsSliced.map((product, index) => {
                             const price = product.price / 100
