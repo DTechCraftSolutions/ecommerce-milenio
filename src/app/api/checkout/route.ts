@@ -36,7 +36,7 @@ export async function POST(req: NextRequest){
             payment_methods: {
               installments: 10
             },
-            notification_url: `${process.env.NEXT_PUBLIC_API_URL}/orders/approved/${orderId}`,
+            notification_url: `https://milenio-api.vercel.app/orders/approved/${orderId}`,
             back_urls: {
               success: `${process.env.NEXT_PUBLIC_APP_URL}/`,
         
