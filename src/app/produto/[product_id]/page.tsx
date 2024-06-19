@@ -52,8 +52,8 @@ export default function Page({
       method: "post"
     })
     if (response) {
-      if(response.valuePromotionInPercent){
-        setDiscount(response.valuePromotionInPercent/100)
+      if (response.valuePromotionInPercent) {
+        setDiscount(response.valuePromotionInPercent / 100)
       }
       return setProductDetails(response)
     }
@@ -124,9 +124,9 @@ export default function Page({
       method: "get"
     })
 
-    if ( actualStock.amount <= 0) return toast.error("Variação sem estoque!")
+    if (actualStock.amount <= 0) return toast.error("Variação sem estoque!")
 
- 
+
 
     const priceWithDiscount = productDetails.valuePromotionInPercent ? (productDetails.price / 100) - (productDetails.price / 100) * (productDetails.valuePromotionInPercent / 100) : (productDetails.price / 100)
     const newCartItem = {
@@ -160,72 +160,74 @@ export default function Page({
   const router = useRouter()
   return (
     loading ? <div><LoadingModal loading={loading} /></div> : <div className="w-full min-h-screen lg:bg-gray-200 pb-8">
-      <div className="w-full md:px-10  h-16 md:h-28 px-4 flex bg-primary z-50 items-center text-white md:bg-primary justify-between  fixed">
-        <button onClick={() => router.back()} className="md:hidden">
-          <IoArrowBack className="text-2xl" />
-        </button>
-        <div className="w-16 h-16 rounded-full md:hidden flex justify-center items-center bg-primary">
-          <Link href={"/"}><Image className="w-10 h-10" src={"/logo-sem-fundo.png"} alt="Logo" width={100} height={100} /></Link>
-        </div>
-        <Link className="hidden md:block" href={"/"}><Image className="hidden md:block" src={"/logo-horizontal.png"} alt="Logo" width={200} height={200} /></Link>
-        <div className="w-[30%] mr-32 hidden justify-between lg:flex">
-          <NavigationMenu className="w-full">
-            <NavigationMenuList className="flex items-center">
-              <div className="flex items-center">
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent hover:bg-primary">Categorias</NavigationMenuTrigger>
-                  <NavigationMenuContent className="w-56 flex flex-col px-12 bg-primary py-4 text-white max-h-72">
-                    {categories?.map((category: any) => (
-                      <Link
-                        key={category.id}
-                        href={`/categoria/${category.id}`}
-                        className="hover:bg-zinc-400 h-10 flex items-center justify-center hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded "
-                      >
-                        {category.name}
-                      </Link>
-                    ))}
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                <button className="hover:bg-zinc-400 h-10 hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded ">
-                  Promoções
-                </button>
-              </div>
-
-            </NavigationMenuList>
-          </NavigationMenu>
-          <div className="flex  items-center text-white justify-center gap-4">
-            <a
-              href={CompanyDetails.facebook}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <IoLogoFacebook className="text-xl" />
-            </a>
-            <a
-              href={CompanyDetails.instagram}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <IoLogoInstagram className="text-xl" />
-            </a>
-            <a href={CompanyDetails.whatsapp} target="_blank" rel="noreferrer">
-              <IoLogoWhatsapp className="text-xl" />
-            </a>
+      <div className="w-full  bg-primary z-50 text-white fixed">
+        <div className="w-full xl:max-w-[1300px] mx-auto justify-between  h-16 md:h-28 px-4 flex items-center">
+          <button onClick={() => router.back()} className="md:hidden">
+            <IoArrowBack className="text-2xl" />
+          </button>
+          <div className="w-16 h-16 rounded-full md:hidden flex justify-center items-center bg-primary">
+            <Link href={"/"}><Image className="w-10 h-10" src={"/logo-sem-fundo.png"} alt="Logo" width={100} height={100} /></Link>
           </div>
+          <Link className="hidden md:block" href={"/"}><Image className="hidden md:block" src={"/logo-horizontal.png"} alt="Logo" width={200} height={200} /></Link>
+          <div className="w-[30%] mr-32 hidden justify-between lg:flex">
+            <NavigationMenu className="w-full">
+              <NavigationMenuList className="flex items-center">
+                <div className="flex items-center">
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="bg-transparent hover:bg-primary">Categorias</NavigationMenuTrigger>
+                    <NavigationMenuContent className="w-56 flex flex-col px-12 bg-primary py-4 text-white max-h-72">
+                      {categories?.map((category: any) => (
+                        <Link
+                          key={category.id}
+                          href={`/categoria/${category.id}`}
+                          className="hover:bg-zinc-400 h-10 flex items-center justify-center hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded "
+                        >
+                          {category.name}
+                        </Link>
+                      ))}
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                  <button className="hover:bg-zinc-400 h-10 hover:text-black bg-opacity-20 hover:duration-500 text-sm px-4 rounded ">
+                    Promoções
+                  </button>
+                </div>
 
-        </div>
-        <Sheet open={openCart} onOpenChange={setOpenCart}>
-          <SheetTrigger>
-            <div className={`${cart.length > 0 ? "bg-red-500 text-white flex w-4 h-4 rounded-full  float-right relative z-50 full justify-center items-center" : "hidden"}`}>
-              1
+              </NavigationMenuList>
+            </NavigationMenu>
+            <div className="flex  items-center text-white justify-center gap-4">
+              <a
+                href={CompanyDetails.facebook}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <IoLogoFacebook className="text-xl" />
+              </a>
+              <a
+                href={CompanyDetails.instagram}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <IoLogoInstagram className="text-xl" />
+              </a>
+              <a href={CompanyDetails.whatsapp} target="_blank" rel="noreferrer">
+                <IoLogoWhatsapp className="text-xl" />
+              </a>
             </div>
-            <IoBag className="text-2xl " />
-          </SheetTrigger>
-          <SheetContent>
-            <SheetClose className="outline-none ring-transparent ring-0" />
-            <Cart />
-          </SheetContent>
-        </Sheet>
+
+          </div>
+          <Sheet open={openCart} onOpenChange={setOpenCart}>
+            <SheetTrigger>
+              <div className={`${cart.length > 0 ? "bg-red-500 text-white flex w-4 h-4 rounded-full  float-right relative z-50 full justify-center items-center" : "hidden"}`}>
+                1
+              </div>
+              <IoBag className="text-2xl " />
+            </SheetTrigger>
+            <SheetContent>
+              <SheetClose className="outline-none ring-transparent ring-0" />
+              <Cart />
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
       {/* imagem mobile */}
       <div className="h-16"></div>
@@ -236,7 +238,7 @@ export default function Page({
       </div>
       {/* Desktop */}
       <div className="hidden  pt-32 md:block">
-        <div className="w-3/4 mx-auto flex justify-start border-b-[0.5px] border-zinc-200 pb-2 mb-5 gap-5 items-center">
+        <div className="w-3/4 xl:max-w-[1300px] mx-auto flex justify-start border-b-[0.5px] border-zinc-200 pb-2 mb-5 gap-5 items-center">
           <Breadcrumb className="">
             <BreadcrumbList>
               <BreadcrumbItem className="bg-primary text-white hover:text-white hover:opacity-80 duration-500 p-2 rounded-lg">
@@ -250,7 +252,7 @@ export default function Page({
             {productDetails.name}
           </h2>
         </div>
-        <div className="md:flex w-[80vw] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-t-3xl shadow-md justify-between  ">
+        <div className="md:flex w-[80vw] xl:max-w-[1300px] mx-auto h-[75vh] px-10 hidden bg-white py-6 rounded-t-3xl shadow-md justify-between  ">
           <div style={{ backgroundImage: `url(${productDetails.imageUrl})` }} className="w-[35%] h-full shadow-lg rounded-lg flex justify-center items-end bg-cover bg-center bg-no-repeat">
             <div className=" justify-between w-14 flex mb-5 items-center">
 
@@ -317,7 +319,7 @@ export default function Page({
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-primary ">Total R$</h3>
                       <h3 className="font-semibold text-2xl text-primary">
-                        {String(( (productDetails?.price / 100) * amount * (1- (discount))).toFixed(2)).replace(".", ",")}
+                        {String(((productDetails?.price / 100) * amount * (1 - (discount))).toFixed(2)).replace(".", ",")}
                       </h3>
                     </div>
                 }
@@ -396,7 +398,7 @@ export default function Page({
               Total R$
             </h3>
             <p className="text-3xl">
-              {loading ? "" : String(( (productDetails?.price / 100) * amount * (1- (discount))).toFixed(2)).replace(".", ",")}
+              {loading ? "" : String(((productDetails?.price / 100) * amount * (1 - (discount))).toFixed(2)).replace(".", ",")}
             </p>
           </div>
         </div>

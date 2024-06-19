@@ -24,7 +24,7 @@ export function BannerCaroussel({ banners }: BannerCarousselProps) {
             plugins={[plugin.current]}
             onMouseEnter={plugin.current.stop}
             onMouseLeave={plugin.current.reset}
-            className={`${banners.length === 0 ? "hidden" : ""} w-[92%] lg:mt-24 md:w-[75%] mx-auto -z-0   max-w-full`}>
+            className={`${banners.length === 0 ? "hidden" : ""} w-[92%] lg:mt-24 md:max-w-[1300px] mx-auto -z-0   max-w-full`}>
             <CarouselContent className="w-full ">
                 {
                     banners.map((banner) => {
