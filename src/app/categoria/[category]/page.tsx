@@ -22,6 +22,7 @@ import { fetchApi } from "@/api";
 import Link from "next/link";
 import { LoadingModal } from "@/components/loader";
 import Image from "next/image";
+import Footer from "@/components/footer";
 const PRODUCTS_PER_PAGE = 8;
 
 export default function Page() {
@@ -112,7 +113,7 @@ export default function Page() {
     };
 
     return (
-        <div className="w-screen min-h-screen  pb-10">
+        <div className="w-screen min-h-screen">
             <Header categories={categories} animation={false} />
             <div className="w-full fixed z-50 top-16 py-4 lg:hidden h-32 bg-primary">
                     <div className="w-[80%] flex items-center mx-auto rounded bg-zinc-100">
@@ -168,7 +169,7 @@ export default function Page() {
                 </div>
                 <div className="w-full lg:w-[95vw] mx-auto flex md:justify-start justify-center mt-5">
                     <Select onValueChange={handleSortChange}>
-                        <SelectTrigger className="w-72 bg-zinc-300 h-12 flex items-center justify-between px-2 text-primary border-[0.5px] border-zinc-300 rounded">
+                        <SelectTrigger className="w-72  h-12 flex items-center justify-between px-2 text-primary border-[0.5px] border-zinc-300 rounded">
                             <SelectValue placeholder="Filtre..." />
                             <MdOutlineKeyboardArrowDown className="text-primary" />
                         </SelectTrigger>
@@ -239,6 +240,9 @@ export default function Page() {
 
             </div>
             <LoadingModal loading={loading} />
+            <div className="mt-8">
+                <Footer />
+            </div>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { fetchApi } from "@/api";
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { LoadingModal } from "@/components/loader";
 import { ProductCard } from "@/components/product-card";
@@ -99,6 +100,9 @@ export default function Page({
                         </div>
 
                     </div>
+                </div>
+                <div className="mt-10">
+                        <Footer />
                 </div>
             </div>
         )

@@ -112,20 +112,7 @@ export function Cart() {
                     ))
                 }
             </div>
-            <div className="flex flex-col w-full gap-2 mt-4 items-end">
-                <div className="flex flex-col gap-1 w-full">
-                    <label htmlFor="cep" className="text-gray-600">Calcular frete</label>
-                    <div className="flex gap-2 items-center">
-                        <input id="cep" placeholder="CEP" type="text" className="w-full h-10 pl-4 rounded-md border border-gray-300" />
-                        <button type="button" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition duration-300">Aplicar</button>
-                    </div>
-                </div>
-                <div className="text-right">
-                    <p className="text-gray-700 font-semibold">
-                        Valor total: R$ {String(totalValue).replace(".", ",")}.
-                    </p>
-                </div>
-            </div>
+            
             <Button disabled={cart.length === 0} onClick={() => router.push('/checkout')} type="button" className="bg-primary w-full py-2 text-white font-medium rounded-md mt-4 hover:bg-primary/80 transition duration-300">
                 Finalizar Compra
             </Button>

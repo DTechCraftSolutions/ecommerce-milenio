@@ -3,6 +3,7 @@
 import { fetchApi } from "@/api";
 import { BannerCaroussel } from "@/components/banners-caroussel";
 import { CategoryArea } from "@/components/category-area";
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 import { HeaderBannerMobile } from "@/components/header-banner-mobile";
 import { LoadingModal } from "@/components/loader";
@@ -57,6 +58,9 @@ export default function Home() {
 
       </div>
       <LoadingModal loading={isLoading} />
+      <div className="mt-10">
+      <Footer />
+      </div>
     </main>
   );
 }
