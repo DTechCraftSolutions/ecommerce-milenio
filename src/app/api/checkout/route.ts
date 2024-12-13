@@ -10,7 +10,7 @@ const client = new MercadoPagoConfig({
 export async function POST(req: NextRequest) {
   try {
     // Lendo os dados do corpo da requisição
-    const { value, items, orderId } = await req.json();
+    const { value, items, orderId, shippingCost } = await req.json();
 
     // Validações
     if (!value) {
@@ -30,24 +30,35 @@ export async function POST(req: NextRequest) {
     // Criação da preferência de pagamento
     const preference = new Preference(client);
 
+    const itens =  [...items.map(
+      ({ name, price, quantity, imageUrl }: any): PreferenceItem => ({
+        title: name,
+        unit_price: price,
+        quantity,
+        picture_url: imageUrl,
+        currency_id: 'BRL',
+      })
+    )]
+
+    if (shippingCost > 0) {
+      itens.push({
+        title: 'Frete',
+        unit_price: shippingCost,
+        quantity: 1,
+        currency_id: 'BRL',
+      });
+    }
+
     const response = await preference.create({
       body: {
-        items: items.map(
-          ({ name, price, quantity, imageUrl }: any): PreferenceItem => ({
-            title: name,
-            unit_price: price,
-            quantity,
-            picture_url: imageUrl,
-            currency_id: 'BRL',
-          })
-        ),
+        items: itens,
         payment_methods: {
           installments: 10, // Limite de parcelas
         },
         notification_url: `https://milenio-api.vercel.app/orders/approved/${orderId}`,
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
-          failure: `${process.env.NEXT_PUBLIC_APP_URL}/failure`,
+          success: `${process.env.NEXT_PUBLIC_APP_URL}/`,
+          failure: `${process.env.NEXT_PUBLIC_APP_URL}/`,
         },
         auto_return: 'approved',
       },

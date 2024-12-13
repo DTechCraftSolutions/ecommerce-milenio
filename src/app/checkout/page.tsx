@@ -38,9 +38,8 @@ export default function Checkout() {
   const [discount, setDiscount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
 
-  const totalSum = cart
+  const totalSum = Number(shippingCost) + cart
     .reduce((acc, item) => acc + item.quantity * item.price, 0)
-    .toFixed(2);
   const router = useRouter();
 
   const getCoupons = async () => {
@@ -55,6 +54,10 @@ export default function Checkout() {
 
     return console.log("error");
   };
+
+  const total = (Number(totalSum) - Number(discount))
+
+  console.log(total)
 
   useEffect(() => {
     getCoupons();
@@ -141,9 +144,9 @@ export default function Checkout() {
         cartItems: products,
         send_product: false,
         paymentStatus: "pendente",
-        shippingCost: 0,
+        shippingCost: shippingCost * 100, 
         totalAmount: (Number(totalSum) - discount) * 100, // em centavos
-        user_address: `${street}, ${number}, ${neighborhood}, Limoeiro - PE, ${complement}`,
+        user_address: shippingCost > 0 ? `${neighborhood}, ${street}, ${number}, ${complement}` : "Retirada na loja",
         user_name: name,
         user_email: email,
         user_telephone: phone,
@@ -173,8 +176,9 @@ export default function Checkout() {
         });
         const checkout = await axios.post("/api/checkout", {
           orderId: response.id,
-          value: totalSum - discount,
+          value: total,
           items: cart,
+          shippingCost,
         });
         window.location.href = checkout.data.url;
         setCart([]);
@@ -275,9 +279,9 @@ export default function Checkout() {
                   Retirar na loja
                 </button>
                 <button
-                  onClick={() => setShippingCost(6 * 100)}
+                  onClick={() => setShippingCost(6)}
                   className={`rounded-md px-2 py-1 text-cente ${
-                    shippingCost === 6 * 100
+                    shippingCost === 6
                       ? "bg-primary text-white"
                       : "bg-gray-200"
                   } text-white`}
@@ -383,9 +387,15 @@ export default function Checkout() {
                     {String(discount.toFixed(2)).replace(".", ",")}
                   </p>
                 ) : null}
+                {shippingCost > 0 ? (
+                  <p className="text-sm">
+                    Frete - R${" "}
+                    {String(shippingCost.toFixed(2)).replace(".", ",")}
+                  </p>
+                ): null}
                 <p className="text-sm font-bold">
                   TOTAL: R${" "}
-                  {String((totalSum - discount).toFixed(2)).replace(".", ",")}
+                  {String((Number(totalSum) - Number(discount)).toFixed(2)).replace(".", ",")}
                 </p>
               </div>
             </div>
