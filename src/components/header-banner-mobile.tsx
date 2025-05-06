@@ -19,7 +19,7 @@ export function HeaderBannerMobile() {
         }
     })
     return (
-        <div  className="bg-cover bg-[#c43e42] lg:hidden flex justify-center items-center   w-full h-32">
+        <div className="bg-cover bg-[#c43e42] lg:hidden flex justify-center items-center w-full h-32">
             <div className={`w-24 z-50 h-24 bg-primary relative flex justify-center items-center -bottom-16 border-2 duration-500 border-white rounded-full ${isVisible}`}>
                 <Image className="w-16 h-16"
                     src={"/logo-sem-fundo.png"}

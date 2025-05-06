@@ -1,62 +1,73 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-interface IProps {
-    categories: { id: string, name: string }[]
+interface ISearchBar {
+    categories?: any[]
 }
 
-export function SearchBar({ categories }: IProps) {
-    const [isFixed, setIsFixed] = useState("");
-    const [searchTerm, setSearchTerm] = useState("");
-
-    const fixSearchBar = () => {
-        if (window.scrollY > 340) {
-            setIsFixed("fixed py-2 top-10 bg-primary shadow");
-        } else {
-            setIsFixed("");
-        }
-    };
-
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            window.addEventListener("scroll", fixSearchBar);
-            return () => {
-                window.removeEventListener("scroll", fixSearchBar);
-            };
-        }
-    }, []);
-
+export function SearchBar({ categories }: ISearchBar) {
+    const [search, setSearch] = useState("");
+    const [isFocused, setIsFocused] = useState(false);
     const router = useRouter();
 
     return (
-        <div className={`w-full py-2 mt-5 z-50 flex flex-col ${isFixed} lg:hidden duration-500 justify-center items-center`}>
-            <div className="w-[80%] flex items-center rounded bg-zinc-100">
-                <input
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    type="text"
-                    className="w-full h-12 pl-4 rounded outline-none bg-transparent"
-                    placeholder="Pesquisar..."
-                    onKeyDown={(e) => e.key === "Enter" && searchTerm !== "" && router.push(`/pesquisa/${searchTerm}`)}
-                />
-                <button onClick={() => {
-                    if (searchTerm !== "") {
-                        router.push(`/pesquisa/${searchTerm}`);
-                    }
-                }} className="text-xl hover:bg-zinc-200 duration-300 p-3 relative right-4 text-zinc-500">
-                    <IoSearch />
-                </button>
+        <div className="w-full px-4 lg:px-0">
+            <div className="relative">
+                <div className="relative flex items-center">
+                    <input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                        type="text"
+                        className="w-full h-12 pl-12 pr-4 rounded-full outline-none bg-white shadow-sm border border-gray-200 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                        placeholder="O que você está procurando?"
+                        onKeyDown={(e) => e.key === "Enter" && search !== "" && router.push(`/pesquisa/${search}`)}
+                    />
+                    <IoSearch className="absolute left-4 text-xl text-gray-400" />
+                    <button
+                        onClick={() => {
+                            if (search !== "") {
+                                router.push(`/pesquisa/${search}`)
+                            }
+                        }}
+                        className="absolute right-2 h-8 px-4 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors duration-300"
+                    >
+                        Buscar
+                    </button>
+                </div>
+
+                <AnimatePresence>
+                    {isFocused && categories && categories.length > 0 && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50"
+                        >
+                            <div className="p-3">
+                                <h3 className="text-sm font-medium text-gray-500 mb-2">Categorias populares</h3>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {categories.slice(0, 6).map((category) => (
+                                        <button
+                                            key={category.id}
+                                            onClick={() => router.push(`/categoria/${category.id}`)}
+                                            className="text-left p-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                                        >
+                                            {category.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
-            <ul className={`flex md:w-4/5 md:flex-wrap w-full h-12 ${isFixed === "" ? "text-primary" : "text-white"} px-4 items-center primary font-medium gap-4 overflow-auto`}>
-                {categories.map((category) => (
-                    <li onClick={() => router.push(`/categoria/${category.id}`)} key={category.id}>
-                        {category.name}
-                    </li>
-                ))}
-            </ul>
         </div>
     );
 }

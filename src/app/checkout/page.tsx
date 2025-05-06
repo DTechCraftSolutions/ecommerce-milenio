@@ -57,7 +57,6 @@ export default function Checkout() {
 
   const total = (Number(totalSum) - Number(discount))
 
-  console.log(total)
 
   useEffect(() => {
     getCoupons();
@@ -197,7 +196,7 @@ export default function Checkout() {
   return (
     <div className="w-screen min-h-screen pb-20 bg-gray-200">
       <Header animation={false} />
-      <div className="pt-16 lg:pt-32 px-4 lg:px-16">
+      <div className="pt-16 lg:pt-32 px-4 mt-6 lg:px-16">
         <div className="flex justify-between items-center py-3 lg:hidden">
           <BiArrowBack
             onClick={() => router.back()}
