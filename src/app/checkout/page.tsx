@@ -22,6 +22,8 @@ import { RiFilePaperLine } from "react-icons/ri";
 import { toast } from "sonner";
 import { isBefore } from "date-fns";
 import Cookies from "js-cookie";
+import Image from "next/image";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function Checkout() {
   const { cart, setCart } = useContext(CartContext);
@@ -37,6 +39,11 @@ export default function Checkout() {
   const [coupons, setCoupons] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState("pix");
+  const [pixQrCode, setPixQrCode] = useState("");
+  const [pixCopyPaste, setPixCopyPaste] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("pending");
+  const [orderId, setOrderId] = useState("");
 
   const totalSum = Number(shippingCost) + cart
     .reduce((acc, item) => acc + item.quantity * item.price, 0)
@@ -96,13 +103,14 @@ export default function Checkout() {
     let itemsNoStock: any = [];
     setLoading(true);
     try {
-      if (!name || !email || !phone )
+      if (!name || !email || !phone)
         return toast.error("Preencha todos os campos");
       if (shippingCost > 0) {
         if (!neighborhood || !street || !number || !complement) {
           return toast.error("Preencha as informações de entrega");
         }
       }
+
       const products = cart.map((item: any) => {
         return {
           productId: item.product_id,
@@ -111,6 +119,8 @@ export default function Checkout() {
           observation: item.observation || "",
         };
       });
+
+      // Verificar estoque
       await Promise.all(
         products.map(async (item: any) => {
           const variant = await fetchApi({
@@ -125,10 +135,11 @@ export default function Checkout() {
               });
         })
       );
+
       if (itemsNoStock.length > 0) {
         setLoading(false);
         toast.error(
-          `Os seguintes itens não possuem estoque: ${itemsNoStock.map(
+          `Os seguintes itens não possuem estoque: ${itemsNoStock.map(
             (item: any) => {
               const productName = cart.find(
                 (cartItem: any) => cartItem.variant_id === item.variantId
@@ -139,16 +150,19 @@ export default function Checkout() {
         );
         return;
       }
+
+      // Criar o pedido primeiro
       const orderData = {
         cartItems: products,
         send_product: false,
-        paymentStatus: "pendente",
-        shippingCost: shippingCost * 100, 
-        totalAmount: (Number(totalSum) - discount) * 100, // em centavos
+        paymentStatus: "pending",
+        shippingCost: shippingCost * 100,
+        totalAmount: (Number(totalSum) - discount) * 100,
         user_address: shippingCost > 0 ? `${neighborhood}, ${street}, ${number}, ${complement}` : "Retirada na loja",
         user_name: name,
         user_email: email,
         user_telephone: phone,
+        paymentMethod
       };
 
       const response = await fetchApi({
@@ -158,30 +172,39 @@ export default function Checkout() {
       });
 
       if (response && response.id) {
-        cart.map(async (item: any) => {
-          const variantData = await fetchApi({
-            path: `/variants/${item.variant_id}`,
-            method: "get",
-          });
-          const productToUpdateStock = {
-            amount: variantData.amount - item.quantity,
-          };
-          const updateStock = fetchApi({
-            path: `/variants/update/${item.variant_id}`,
-            method: "put",
-            body: productToUpdateStock,
-          });
-          await updateStock;
-        });
-        const checkout = await axios.post("/api/checkout", {
+        // Processar o pagamento
+        const paymentData = {
           orderId: response.id,
           value: total,
-          items: cart,
-          shippingCost,
-        });
-        window.location.href = checkout.data.url;
-        setCart([]);
-        Cookies.remove("cart");
+          items: cart.map(item => ({
+            description: item.name,
+            quantity: item.quantity,
+            unitValue: item.price * 100
+          })),
+          paymentMethod,
+          // Configurações específicas para cada método de pagamento
+          paymentConfig: {
+            name: `Pedido #${response.id}`,
+            description: `Pagamento do pedido #${response.id}`,
+            billingType: paymentMethod === "credit" ? "CREDIT_CARD" : paymentMethod.toUpperCase(),
+            value: total * 100,
+            dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 dias
+            chargeType: "DETACHED",
+            notificationEnabled: true,
+            // Configurações específicas para cartão de crédito
+            ...(paymentMethod === "credit" && {
+              maxInstallmentCount: 10
+            })
+          }
+        };
+
+        const paymentResponse = await axios.post("/api/checkout", paymentData);
+        
+        if (paymentResponse.data.url) {
+          window.location.href = paymentResponse.data.url;
+        } else {
+          throw new Error("Erro ao processar pagamento");
+        }
       } else {
         toast.error("Criação do pedido falhou, tente novamente mais tarde");
       }
@@ -192,6 +215,32 @@ export default function Checkout() {
       setLoading(false);
     }
   };
+
+  // Função para verificar status do pagamento PIX
+  const checkPixStatus = async () => {
+    if (paymentStatus === "waiting" && orderId) {
+      try {
+        const response = await axios.get(`/api/checkout/status/${orderId}`);
+        if (response.data.status === "approved") {
+          setPaymentStatus("approved");
+          setCart([]);
+          Cookies.remove("cart");
+          toast.success("Pagamento aprovado com sucesso!");
+          router.push("/success");
+        }
+      } catch (error) {
+        console.error("Erro ao verificar status do pagamento:", error);
+      }
+    }
+  };
+
+  // Verificar status do PIX a cada 5 segundos
+  useEffect(() => {
+    if (paymentStatus === "waiting") {
+      const interval = setInterval(checkPixStatus, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [paymentStatus, orderId]);
 
   return (
     <div className="w-screen min-h-screen pb-20 bg-gray-200">
@@ -331,6 +380,38 @@ export default function Checkout() {
                 </div>
               </div>
             )}
+            <div className="w-full">
+              <div className="flex justify-center gap-2 items-center text-lg text-primary font-medium py-3 border-b-[0.5px]">
+                <MdOutlineAttachMoney className="text-lg text-primary" />
+                Forma de Pagamento
+              </div>
+              <div className="w-full px-2 py-2 lg:grid lg:grid-cols-1 lg:gap-4">
+                <button
+                  onClick={() => setPaymentMethod("pix")}
+                  className={`w-full rounded-md px-2 py-1 text-center mb-2 ${
+                    paymentMethod === "pix" ? "bg-primary text-white" : "bg-gray-200"
+                  } text-white`}
+                >
+                  Pix
+                </button>
+                <button
+                  onClick={() => setPaymentMethod("boleto")}
+                  className={`w-full rounded-md px-2 py-1 text-center mb-2 ${
+                    paymentMethod === "boleto" ? "bg-primary text-white" : "bg-gray-200"
+                  } text-white`}
+                >
+                  Boleto
+                </button>
+                <button
+                  onClick={() => setPaymentMethod("credit")}
+                  className={`w-full rounded-md px-2 py-1 text-center ${
+                    paymentMethod === "credit" ? "bg-primary text-white" : "bg-gray-200"
+                  } text-white`}
+                >
+                  Cartão de Crédito
+                </button>
+              </div>
+            </div>
           </div>
           <div className="w-full mb-56 md:mb-0 bg-white shadow-md lg:mt-0 mt-4 p-6 rounded-2xl">
             <div className="flex justify-center gap-2 items-center text-lg text-primary font-medium py-3 border-b-[0.5px]">
