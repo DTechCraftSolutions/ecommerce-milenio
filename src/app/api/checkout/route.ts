@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       value: Number(value),
       dueDate: dueDateStr,
       dueDateLimitDays: 3,
-      maxInstallmentCount: 12,
+      maxInstallmentCount: value > 20 ? 12 : 1,
       notificationEnabled: true,
       callbackUrl: {
         successUrl: `${process.env.APP_URL}`,
