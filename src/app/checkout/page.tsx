@@ -40,8 +40,6 @@ export default function Checkout() {
   const [discount, setDiscount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("pix");
-  const [pixQrCode, setPixQrCode] = useState("");
-  const [pixCopyPaste, setPixCopyPaste] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [orderId, setOrderId] = useState("");
 
@@ -102,6 +100,10 @@ export default function Checkout() {
   const createOrder = async () => {
     let itemsNoStock: any = [];
     setLoading(true);
+    if(totalSum < 5){
+      setLoading(false);
+      return toast.error("O valor mínimo de compra é de R$5,00");
+    }
     try {
       if (!name || !email || !phone)
         return toast.error("Preencha todos os campos");
@@ -119,7 +121,7 @@ export default function Checkout() {
           observation: item.observation || "",
         };
       });
-
+      let stocks: any[] = []
       // Verificar estoque
       await Promise.all(
         products.map(async (item: any) => {
@@ -127,6 +129,12 @@ export default function Checkout() {
             path: `/variants/${item.variantId}`,
             method: "get",
           });
+          stocks.push({
+            variantId: item.variantId,
+            amount: variant.amount,
+            quantity: item.quantity,
+            name: item.name
+          })
           return variant.amount > 0
             ? null
             : itemsNoStock.push({
@@ -151,6 +159,13 @@ export default function Checkout() {
         return;
       }
 
+      // verificar se o estoque é suficiente
+      const stockCheck = stocks.filter((item: any) => item.amount < item.quantity)
+      if(stockCheck.length > 0){
+        setLoading(false);
+        return toast.error("Estoque insuficiente para " + cart.filter((item: any) => stockCheck.some((stock: any) => stock.variantId === item.variant_id)).map((item: any) => item.name).join(", "))
+      }
+
       // Criar o pedido primeiro
       const orderData = {
         cartItems: products,
@@ -171,6 +186,16 @@ export default function Checkout() {
         body: orderData,
       });
 
+      Promise.all(stocks.map(async (item: any) => {
+         await fetchApi({
+          path: `/variants/update/${item.variantId}`,
+          method: "put",
+          body: {
+            amount: item.amount - item.quantity
+          }
+        });
+      }))
+      
       if (response && response.id) {
         // Processar o pagamento
         const paymentData = {
