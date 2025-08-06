@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
 
 export async function POST(req: NextRequest) {
   try {
@@ -66,61 +67,54 @@ export async function POST(req: NextRequest) {
 
 
     const endpointAsaas = process.env.AMBIENT === 'production' ? 'https://api.asaas.com/v3/paymentLinks' : 'https://sandbox.asaas.com/api/v3/paymentLinks';
-    const asaasResponse = await fetch(
-      endpointAsaas,
-      {
-        method: 'POST',
+    
+    let asaasData: any = null;
+    
+    try {
+      const asaasResponse = await axios.post(endpointAsaas, payload, {
         headers: {
           'Content-Type': 'application/json',
-          access_token: `$${process.env.ASAAS_API_KEY!}`
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    // Lê sempre como texto para evitar erros de JSON vazio
-    const text = await asaasResponse.text();
-
-    // Tenta converter em JSON se o body não estiver vazio
-    let asaasData: any = null;
-    if (text) {
-      try {
-        asaasData = JSON.parse(text);
-      } catch (e) {
-        console.error('Não foi possível parsear JSON do Asaas:', text);
-      }
-    }
-
-    // Se o Asaas retornar status de erro
-    if (!asaasResponse.ok) {
-      const msg = asaasData?.errors || text || asaasResponse.statusText;
+          'access_token': `$${process.env.ASAAS_API_KEY!}`
+        }
+      });
+      
+      asaasData = asaasResponse.data;
+    } catch (error: any) {
+      const msg = error.response?.data?.errors || error.message || 'Erro ao criar payment link';
       return NextResponse.json(
         { ok: false, error: msg },
-        { status: asaasResponse.status }
+        { status: error.response?.status || 500 }
       );
     }
-
+    
     // Verifica se veio url
     if (!asaasData || !asaasData.url) {
-      const msg = asaasData?.errors || text || 'Nenhuma URL de pagamento retornada';
+      const msg = asaasData?.errors || 'Nenhuma URL de pagamento retornada';
       return NextResponse.json(
         { ok: false, error: msg },
         { status: 500 }
       );
     }
 
+
+
     try {
       const apiURL = process.env.API_URL || 'http://localhost:3333';
-      await fetch(`${apiURL}/payments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          asaasId: asaasData.id,
-          orderId,
-          value,
-          url: asaasData.url,
-          status: asaasData.status || 'PENDING',
-        }),
+      const paymentData = {
+        asaasId: asaasData.id,
+        orderId,
+        value,
+        url: asaasData.url,
+        status: asaasData.status || 'PENDING',
+      };
+      
+      console.log('Registrando pagamento na API:', { apiURL, paymentData });
+      
+      await axios.post(`${apiURL}/payments`, paymentData, {
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
       });
     } catch (e) {
       console.error('Erro ao registrar pagamento na API:', e);
